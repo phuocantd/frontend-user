@@ -2,8 +2,8 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Layout } from 'antd';
 import './App.css';
-import Login from './components/Login/Login';
-import Register from './components/Register/Register';
+import Login from './pages/Login/Login';
+import Register from './pages/Register/Register';
 
 function App() {
   return (

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Form, Button, Input, Icon, message, Spin, Checkbox } from 'antd';
+import { connect } from 'react-redux';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import GoogleLogin from 'react-google-login';
-import './Login.css';
+import './LoginForm.css';
+import { handleAuthen } from '../../actions/user';
 
 class LoginForm extends Component {
   handleSubmit = e => {
@@ -34,7 +36,7 @@ class LoginForm extends Component {
   };
 
   render() {
-    const { form, requesting } = this.props;
+    const { form, isRequest } = this.props;
     const { getFieldDecorator } = form;
     const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
     return (
@@ -51,7 +53,7 @@ class LoginForm extends Component {
             alignItems: 'center'
           }}
         >
-          <Spin spinning={requesting} indicator={antIcon} />
+          <Spin spinning={isRequest} indicator={antIcon} />
         </Form.Item>
         <Form.Item>
           {getFieldDecorator('email', {
@@ -87,7 +89,7 @@ class LoginForm extends Component {
             Log in
           </Button>
           <FacebookLogin
-            appId="2369352233173069"
+            appId="585874832148477"
             callback={this.responseFacebook}
             render={renderProps => (
               <Button
@@ -101,7 +103,7 @@ class LoginForm extends Component {
             )}
           />
           <GoogleLogin
-            clientId="997385405136-fnmk9qjfcm2aoia7o9jdb4d2tuui7b4n.apps.googleusercontent.com"
+            clientId="405007263881-p8drbte3o6vrccl4tl79d3a6srughku1.apps.googleusercontent.com"
             render={renderProps => (
               <Button
                 type="danger"
@@ -122,4 +124,21 @@ class LoginForm extends Component {
   }
 }
 
-export default Form.create({ name: 'login_form' })(LoginForm);
+const mapStateToProps = state => {
+  return {
+    isRequest: state.user.isRequest
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    requestAuthen: item => {
+      dispatch(handleAuthen(item));
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Form.create({ name: 'login_form' })(LoginForm));

@@ -1,7 +1,21 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, message, Spin, Tooltip, Icon } from 'antd';
+import {
+  Form,
+  Input,
+  Button,
+  message,
+  Spin,
+  Tooltip,
+  Icon,
+  Select
+} from 'antd';
+import { connect } from 'react-redux';
+import './RegisterForm.css';
+import { handleRegister } from '../../actions/user';
 
-class StudentsRegisterForm extends Component {
+const { Option } = Select;
+
+class RegisterForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,7 +58,7 @@ class StudentsRegisterForm extends Component {
   };
 
   render() {
-    const { form, requesting } = this.props;
+    const { form, isRequest } = this.props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -79,7 +93,7 @@ class StudentsRegisterForm extends Component {
         }}
       >
         <Spin
-          spinning={requesting}
+          spinning={isRequest}
           indicator={antIcon}
           style={{
             display: 'flex',
@@ -106,7 +120,7 @@ class StudentsRegisterForm extends Component {
         <Form.Item
           label={
             <span>
-              Nickname&nbsp;
+              Fullname&nbsp;
               <Tooltip title="What do you want others to call you?">
                 <Icon type="question-circle-o" />
               </Tooltip>
@@ -149,6 +163,16 @@ class StudentsRegisterForm extends Component {
             ]
           })(<Input.Password onBlur={this.handleConfirmBlur} />)}
         </Form.Item>
+        <Form.Item label="Purpose">
+          {getFieldDecorator('role', {
+            rules: [{ required: true, message: 'Please select your purpose!' }]
+          })(
+            <Select placeholder="Select a purpose">
+              <Option value="student">Im looking for tutor</Option>
+              <Option value="tutor">I want to become a tutor</Option>
+            </Select>
+          )}
+        </Form.Item>
         <Form.Item wrapperCol={tailFormItemLayout.wrapperCol}>
           <Button type="primary" htmlType="submit">
             Register
@@ -159,6 +183,21 @@ class StudentsRegisterForm extends Component {
   }
 }
 
-export default Form.create({ name: 'student_register_form' })(
-  StudentsRegisterForm
-);
+const mapStateToProps = state => {
+  return {
+    isRequest: state.user.isRequest
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    register: item => {
+      dispatch(handleRegister(item));
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Form.create({ name: 'register_form' })(RegisterForm));

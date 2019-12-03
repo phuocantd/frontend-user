@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import { Layout, PageHeader, Button, Card } from 'antd';
+import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
-import LoginForm from './LoginForm';
+import LoginForm from '../../components/LoginForm/LoginForm';
 
 const { Content } = Layout;
 class Login extends PureComponent {
@@ -19,7 +20,7 @@ class Login extends PureComponent {
           }}
           title="Sign In"
           extra={[
-            <Link to="/register">
+            <Link to="/register" key="signUpBtn">
               <Button type="primary">Sign Up</Button>
             </Link>
           ]}
@@ -42,4 +43,10 @@ class Login extends PureComponent {
   }
 }
 
-export default Login;
+const mapStateToProps = state => {
+  return {
+    isLoggedIn: state.user.isLoggedIn
+  };
+};
+
+export default connect(mapStateToProps)(Login);

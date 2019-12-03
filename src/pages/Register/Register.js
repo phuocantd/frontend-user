@@ -1,11 +1,9 @@
 import React, { PureComponent } from 'react';
-import { Layout, PageHeader, Card, Tabs } from 'antd';
+import { Layout, PageHeader, Card } from 'antd';
 import { Redirect, Link } from 'react-router-dom';
-import StudentsRegisterForm from './StudentsRegisterForm';
-import TutorsRegisterForm from './TutorsRegisterForm';
+import RegisterForm from '../../components/RegisterForm/RegisterForm';
 
 const { Content } = Layout;
-const { TabPane } = Tabs;
 
 class Register extends PureComponent {
   render() {
@@ -22,7 +20,7 @@ class Register extends PureComponent {
           }}
           title="Sign Up"
           extra={[
-            <h4>
+            <h4 key="loginBtn">
               Already have an account? <Link to="/login">Login</Link>
             </h4>
           ]}
@@ -36,14 +34,7 @@ class Register extends PureComponent {
           }}
         >
           <Card style={{ width: 500 }} hoverable>
-            <Tabs defaultActiveKey="student">
-              <TabPane tab="Students" key="student">
-                <StudentsRegisterForm />
-              </TabPane>
-              <TabPane tab="Tutors" key="tutor">
-                <TutorsRegisterForm />
-              </TabPane>
-            </Tabs>
+            <RegisterForm />
           </Card>
         </Content>
       </Layout>
