@@ -43,15 +43,15 @@ export const handleAuthen = item => {
       return services.auth
         .loginFacebook(item.accessToken)
         .then(response => {
-          if (response.error < 0) {
-            item.message.error(response.data.message);
+          if (!response.success) {
+            item.message.error(response.error);
           }
           dispatch(login(response));
         })
         .catch(err => {
           dispatch(endRequest());
           if (err.response) {
-            item.message.error(err.response.data.message);
+            item.message.error(err.response.data.error);
           } else {
             item.message.error(err.message);
           }
@@ -62,15 +62,15 @@ export const handleAuthen = item => {
       return services.auth
         .loginGoogle(item.accessToken)
         .then(response => {
-          if (response.error < 0) {
-            item.message.error(response.data.message);
+          if (!response.success) {
+            item.message.error(response.message);
           }
           dispatch(login(response));
         })
         .catch(err => {
           dispatch(endRequest());
           if (err.response) {
-            item.message.error(err.response.data.message);
+            item.message.error(err.response.data.error);
           } else {
             item.message.error(err.message);
           }
@@ -81,21 +81,15 @@ export const handleAuthen = item => {
     return services.auth
       .login(email, password)
       .then(response => {
-        if (response.error < 0) {
-          if (response.data.message instanceof Array) {
-            response.data.message.forEach(val => {
-              item.message.error(val.msg);
-            });
-          } else {
-            item.message.error(response.data.message);
-          }
+        if (!response.success) {
+          item.message.error(response.error);
         }
         dispatch(login(response));
       })
       .catch(err => {
         dispatch(endRequest());
         if (err.response) {
-          item.message.error(err.response.data.message);
+          item.message.error(err.response.data.error);
         } else {
           item.message.error(err.message);
         }
@@ -110,21 +104,17 @@ export const handleRegister = item => {
     return services.auth
       .register(email, password, role, name)
       .then(response => {
-        if (response.error < 0) {
-          if (response.data.message instanceof Array) {
-            response.data.message.forEach(val => {
-              item.message.error(val.msg);
-            });
-          } else {
-            item.message.error(response.data.message);
-          }
+        if (!response.success) {
+          item.message.error(response.error);
+        } else {
+          item.message.success('Register successfully');
+          item.message.info('Email has been sent. Please check your inbox.');
         }
-        dispatch(handleAuthen(item));
       })
       .catch(err => {
         dispatch(endRequest());
         if (err.response) {
-          item.message.error(err.response.data.message);
+          item.message.error(err.response.data.error);
         } else {
           item.message.error(err.message);
         }

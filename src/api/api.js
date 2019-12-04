@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export default {
   getApi(url, request = {}) {
-    request.withCredentials = true;
+    // request.withCredentials = true;
     return axios
       .get(url, request)
       .then(response => {
@@ -13,7 +13,7 @@ export default {
       });
   },
   postApi(url, data = {}, request = {}) {
-    request.withCredentials = true;
+    // request.withCredentials = true;
     return axios
       .post(url, data, request)
       .then(response => {

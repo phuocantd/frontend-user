@@ -90,7 +90,7 @@ class LoginForm extends Component {
           </Button>
           <FacebookLogin
             appId="585874832148477"
-            callback={this.responseFacebook}
+            callback={() => this.responseFacebook.bind(this)}
             render={renderProps => (
               <Button
                 type="primary"
@@ -114,8 +114,8 @@ class LoginForm extends Component {
                 Log in with Google
               </Button>
             )}
-            onSuccess={this.responseGoogle}
-            onFailure={this.responseGoogle}
+            onSuccess={() => this.responseGoogle.bind(this)}
+            onFailure={() => this.responseGoogle.bind(this)}
             cookiePolicy="single_host_origin"
           />
         </Form.Item>
