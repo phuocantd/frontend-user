@@ -1,10 +1,10 @@
-const DOMAIN = 'http://0.0.0.0:8085';
+const DOMAIN = 'https://zapi-user.herokuapp.com/api';
 
 export default {
-  login: () => `${DOMAIN}/api/auth/login`,
-  register: () => `${DOMAIN}/api/auth/register`,
-  login_facebook: () => `${DOMAIN}/api/auth/facebook`,
-  login_google: () => `${DOMAIN}/api/auth/google`,
-  upload_avatar: () => `${DOMAIN}/api/user/upload`,
-  update_user: () => `${DOMAIN}/api/user/update`
+  login: () => `${DOMAIN}/auth/login`,
+  register: () => `${DOMAIN}/auth/register`,
+  login_facebook: () => `${DOMAIN}/auth/facebook`,
+  login_google: () => `${DOMAIN}/auth/google`,
+  upload_avatar: () => `${DOMAIN}/user/upload`,
+  update_user: () => `${DOMAIN}/user/update`
 };
