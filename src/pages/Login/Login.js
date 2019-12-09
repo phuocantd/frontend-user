@@ -3,6 +3,7 @@ import { Layout, PageHeader, Button, Card } from 'antd';
 import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
 import LoginForm from '../../components/LoginForm/LoginForm';
+import './Login.css';
 
 const { Content } = Layout;
 class Login extends PureComponent {
@@ -12,28 +13,19 @@ class Login extends PureComponent {
       return <Redirect to={{ pathname: '/home' }} />;
     }
     return (
-      <Layout style={{ height: '100vh' }}>
+      <Layout>
         <PageHeader
-          style={{
-            border: '1px solid rgb(235, 237, 240)',
-            backgroundColor: 'white'
-          }}
+          className="loginHeader"
           title="Sign In"
           extra={[
             <Link to="/register" key="signUpBtn">
-              <Button type="primary">Sign Up</Button>
+              <Button type="primary">
+                <b>SIGN UP</b>
+              </Button>
             </Link>
           ]}
         />
-        <Content
-          style={{
-            height: '100vh',
-            display: 'flex',
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
+        <Content className="loginContent">
           <Card style={{ width: 350 }} hoverable>
             <LoginForm />
           </Card>

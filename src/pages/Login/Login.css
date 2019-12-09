@@ -1,0 +1,11 @@
+.loginHeader {
+  border: 1px solid rgb(235, 237, 240);
+  background-color: white;
+}
+.loginContent {
+  height: 100vh;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}

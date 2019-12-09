@@ -4,11 +4,13 @@ import { Layout } from 'antd';
 import './App.css';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
+import Home from './pages/Home/Home';
 
 function App() {
   return (
     <Layout style={{ height: '100vh' }}>
       <Switch>
+        <Route path="/" exact component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
       </Switch>
