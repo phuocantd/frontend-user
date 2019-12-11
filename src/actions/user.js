@@ -110,6 +110,7 @@ export const handleRegister = item => {
           item.message.success('Register successfully');
           item.message.info('Email has been sent. Please check your inbox.');
         }
+        dispatch(endRequest());
       })
       .catch(err => {
         dispatch(endRequest());

@@ -11,6 +11,7 @@ import {
   Popover
 } from 'antd';
 import { Link } from 'react-router-dom';
+import _ from 'lodash';
 import ModalInfo from '../ModalInfo/ModalInfo';
 
 const { Meta } = Card;
@@ -35,13 +36,17 @@ export default class CardInfo extends Component {
     const { visible } = this.state;
     return (
       <>
-        <Card hoverable style={{ width: 300 }}>
+        <Card
+          hoverable
+          style={{ width: 300 }}
+          onClick={() => this.handleOpen()}
+        >
           <Meta
             avatar={<Avatar size={64} src={data.Avatar} />}
             title={<Link to="/profile">{data.Name}</Link>}
             description={data.Specialization}
           />
-          <Row type="flex" justify="center" align="middle">
+          <Row>
             <Popover
               content="The percentage of this freelancer's jobs that resulted in a great client experience."
               title="JOB SUCCESS SCORE"
@@ -64,7 +69,9 @@ export default class CardInfo extends Component {
           <Divider style={{ marginTop: 10, marginBottom: 10 }} />
           <Row>
             {data.Tags.map(tag => (
-              <Tag>{tag}</Tag>
+              <Tag key={_.uniqueId('tag_')} className="marginVertical">
+                {tag}
+              </Tag>
             ))}
           </Row>
           <Row style={{ marginTop: 10, marginBottom: 10 }}>

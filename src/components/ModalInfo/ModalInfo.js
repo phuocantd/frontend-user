@@ -7,9 +7,11 @@ import {
   Statistic,
   Divider,
   Tag,
-  Typography
+  Typography,
+  Rate
 } from 'antd';
 import { Link } from 'react-router-dom';
+import _ from 'lodash';
 import Meta from 'antd/lib/card/Meta';
 
 const { Paragraph, Title } = Typography;
@@ -41,10 +43,11 @@ export default class ModalInfo extends PureComponent {
         </Paragraph>
         <Row>
           {data.Tags.map(tag => (
-            <Tag>{tag}</Tag>
+            <Tag key={_.uniqueId('tag_')}>{tag}</Tag>
           ))}
         </Row>
-        <Title level={4}>Work History & Feedback</Title>
+        <Title level={4}>Work history & feedback</Title>
+        <Rate allowHalf defaultValue={2.5} disabled />
       </Modal>
     );
   }

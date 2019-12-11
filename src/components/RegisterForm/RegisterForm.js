@@ -1,14 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Form,
-  Input,
-  Button,
-  message,
-  Spin,
-  Tooltip,
-  Icon,
-  Select
-} from 'antd';
+import { Form, Input, Button, message, Tooltip, Icon, Select } from 'antd';
 import { connect } from 'react-redux';
 import './RegisterForm.css';
 import { handleRegister } from '../../actions/user';
@@ -82,7 +73,6 @@ class RegisterForm extends Component {
         }
       }
     };
-    const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
     return (
       <Form
         labelCol={formItemLayout.labelCol}
@@ -92,17 +82,6 @@ class RegisterForm extends Component {
           width: '450px'
         }}
       >
-        <Spin
-          spinning={isRequest}
-          indicator={antIcon}
-          style={{
-            display: 'flex',
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            paddingBottom: 20
-          }}
-        />
         <Form.Item label="E-mail">
           {getFieldDecorator('email', {
             rules: [
@@ -174,7 +153,7 @@ class RegisterForm extends Component {
           )}
         </Form.Item>
         <Form.Item wrapperCol={tailFormItemLayout.wrapperCol}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={isRequest}>
             Register
           </Button>
         </Form.Item>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Input, Icon, message, Spin, Checkbox } from 'antd';
+import { Form, Button, Input, Icon, message } from 'antd';
 import { connect } from 'react-redux';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import GoogleLogin from 'react-google-login';
@@ -19,42 +19,35 @@ class LoginForm extends Component {
 
   responseFacebook = resp => {
     const { requestAuthen } = this.props;
-    requestAuthen({
-      accessToken: resp.accessToken,
-      type: 'facebook',
-      message
-    });
+    if (resp) {
+      requestAuthen({
+        accessToken: resp.accessToken,
+        type: 'facebook',
+        message
+      });
+    }
   };
 
   responseGoogle = resp => {
     const { requestAuthen } = this.props;
-    requestAuthen({
-      accessToken: resp.accessToken,
-      type: 'google',
-      message
-    });
+    if (resp) {
+      requestAuthen({
+        accessToken: resp.accessToken,
+        type: 'google',
+        message
+      });
+    }
   };
 
   render() {
     const { form, isRequest } = this.props;
     const { getFieldDecorator } = form;
-    const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
     return (
       <Form
         onSubmit={this.handleSubmit}
         className="login-form"
         style={{ width: 450 }}
       >
-        <Form.Item
-          style={{
-            display: 'flex',
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          <Spin spinning={isRequest} indicator={antIcon} />
-        </Form.Item>
         <Form.Item>
           {getFieldDecorator('email', {
             rules: [{ required: true, message: 'Please input your email!' }]
@@ -77,25 +70,23 @@ class LoginForm extends Component {
           )}
         </Form.Item>
         <Form.Item>
-          {getFieldDecorator('tutor', {
-            valuePropName: 'checked',
-            initialValue: false
-          })(<Checkbox>I am tutor</Checkbox>)}
           <Button
             type="default"
             htmlType="submit"
             className="login-form-button"
+            loading={isRequest}
           >
             Log in
           </Button>
           <FacebookLogin
             appId="585874832148477"
-            callback={() => this.responseFacebook.bind(this)}
+            callback={resp => this.responseFacebook(resp)}
             render={renderProps => (
               <Button
                 type="primary"
                 className="login-form-button"
                 onClick={renderProps.onClick}
+                disabled={isRequest}
               >
                 <Icon type="facebook" theme="filled" />
                 Log in with Facebook
@@ -109,13 +100,14 @@ class LoginForm extends Component {
                 type="danger"
                 className="login-form-button"
                 onClick={renderProps.onClick}
+                disabled={isRequest}
               >
                 <Icon type="google" />
                 Log in with Google
               </Button>
             )}
-            onSuccess={() => this.responseGoogle.bind(this)}
-            onFailure={() => this.responseGoogle.bind(this)}
+            onSuccess={resp => this.responseGoogle(resp)}
+            onFailure={resp => this.responseGoogle(resp)}
             cookiePolicy="single_host_origin"
           />
         </Form.Item>

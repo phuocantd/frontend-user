@@ -17,7 +17,7 @@ const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN: {
       const { payload } = action;
-      if (payload.error < 0) {
+      if (!payload.success) {
         return {
           ...state,
           isRequest: false,
@@ -28,7 +28,6 @@ const userReducer = (state = initialState, action) => {
         ...state,
         isRequest: false,
         isLoggedIn: true,
-        user: payload.data.user,
         token: payload.data.token
       };
     }

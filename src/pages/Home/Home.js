@@ -1,11 +1,10 @@
-import React, { PureComponent } from 'react';
-import { Layout, Button, Carousel, Row, Select, Col } from 'antd';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
+import { Layout, Carousel, Row, Select, Col, Input } from 'antd';
 import _ from 'lodash';
 import './Home.css';
 import CardInfo from '../../components/CardInfo/CardInfo';
 
-const { Header, Content, Footer } = Layout;
+const { Content } = Layout;
 const { Option } = Select;
 const image1 = require('../../assets/images/image1.jpg');
 const image2 = require('../../assets/images/image2.jpg');
@@ -32,7 +31,7 @@ const sampleData = [
     ]
   },
   {
-    idUser: 0,
+    idUser: 1,
     Name: 'Tientd',
     Email: 'tdtien.it@gmail.com',
     Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
@@ -50,7 +49,7 @@ const sampleData = [
     ]
   },
   {
-    idUser: 0,
+    idUser: 2,
     Name: 'Tientd',
     Email: 'tdtien.it@gmail.com',
     Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
@@ -68,7 +67,7 @@ const sampleData = [
     ]
   },
   {
-    idUser: 0,
+    idUser: 3,
     Name: 'Tientd',
     Email: 'tdtien.it@gmail.com',
     Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
@@ -86,7 +85,7 @@ const sampleData = [
     ]
   },
   {
-    idUser: 0,
+    idUser: 4,
     Name: 'Tientd',
     Email: 'tdtien.it@gmail.com',
     Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
@@ -104,7 +103,7 @@ const sampleData = [
     ]
   },
   {
-    idUser: 0,
+    idUser: 5,
     Name: 'Tientd',
     Email: 'tdtien.it@gmail.com',
     Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
@@ -122,7 +121,7 @@ const sampleData = [
     ]
   },
   {
-    idUser: 0,
+    idUser: 6,
     Name: 'Tientd',
     Email: 'tdtien.it@gmail.com',
     Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
@@ -140,7 +139,7 @@ const sampleData = [
     ]
   },
   {
-    idUser: 0,
+    idUser: 7,
     Name: 'Tientd',
     Email: 'tdtien.it@gmail.com',
     Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
@@ -158,7 +157,7 @@ const sampleData = [
     ]
   },
   {
-    idUser: 0,
+    idUser: 8,
     Name: 'Tientd',
     Email: 'tdtien.it@gmail.com',
     Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
@@ -176,7 +175,7 @@ const sampleData = [
     ]
   },
   {
-    idUser: 0,
+    idUser: 9,
     Name: 'Tientd',
     Email: 'tdtien.it@gmail.com',
     Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
@@ -194,25 +193,21 @@ const sampleData = [
     ]
   }
 ];
-class Home extends PureComponent {
+class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.findTutor = React.createRef();
+  }
+
+  gotoFindTutor = () => {
+    document
+      .getElementsByClassName('homeContent')[0]
+      .scrollIntoView({ behavior: 'smooth' });
+  };
+
   render() {
     return (
       <Layout className="homeLayout">
-        <Header className="homeHeader">
-          <div className="rightHeader">
-            <Link className="headerItem" to="/login">
-              <b>LOGIN</b>
-            </Link>
-            <Link className="headerItem" to="/register">
-              <b>SIGN UP</b>
-            </Link>
-            <Link className="headerItem" to="/register">
-              <Button type="primary">
-                <b>FIND TUTOR</b>
-              </Button>
-            </Link>
-          </div>
-        </Header>
         <Carousel autoplay draggable>
           <div className="carouselItem">
             <img src={image1} alt="studying" />
@@ -227,25 +222,11 @@ class Home extends PureComponent {
             <img src={image4} alt="studying" />
           </div>
         </Carousel>
-        <Content className="homeContent">
+        <Content className="homeContent" ref={this.findTutor}>
           <Row gutter={16} style={{ marginTop: 10, marginBottom: 10 }}>
             <strong>Filters: </strong>
             &emsp;
-            <Select
-              showSearch
-              style={{ width: 200 }}
-              placeholder="Select country"
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.props.children
-                  .toLowerCase()
-                  .indexOf(input.toLowerCase()) >= 0
-              }
-            >
-              <Option value="jack">Viet Nam</Option>
-              <Option value="lucy">Lucy</Option>
-              <Option value="tom">Tom</Option>
-            </Select>
+            <Input placeholder="Type location" style={{ width: 200 }} />
             &emsp;
             <Select
               style={{ width: 200 }}
@@ -257,24 +238,23 @@ class Home extends PureComponent {
                   .indexOf(input.toLowerCase()) >= 0
               }
             >
-              <Option value="jack">Jack</Option>
-              <Option value="lucy">Lucy</Option>
-              <Option value="tom">Tom</Option>
+              <Option value="50">Lower than 50</Option>
+              <Option value="100-500">From 100 to 500</Option>
+              <Option value="500-1000">From 500 to 1000</Option>
+              <Option value="1000-5000">From 1000 to 5000</Option>
+              <Option value="5000">Above 5000</Option>
             </Select>
           </Row>
           {_.chunk(sampleData, 4).map(chunk => (
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 16]} key={_.uniqueId('row_')} type="flex">
               {chunk.map(data => (
-                <Col span={6}>
+                <Col key={_.uniqueId('col_')} span={6}>
                   <CardInfo data={data} />
                 </Col>
               ))}
             </Row>
           ))}
         </Content>
-        <Footer className="homeFooter">
-          Ant Design ©2019 Created by tdtien
-        </Footer>
       </Layout>
     );
   }
