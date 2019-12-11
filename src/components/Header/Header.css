@@ -1,0 +1,23 @@
+.mainHeader {
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.leftHeader {
+  float: left;
+}
+.logo {
+  margin-top: 0;
+  margin-bottom: 0 !important;
+}
+.rightHeader {
+  float: right;
+}
+.headerItem {
+  padding-left: 20px;
+  padding-right: 20px;
+}

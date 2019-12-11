@@ -1,0 +1,8 @@
+.mainFooter {
+  text-align: center;
+  background-color: #ffffff;
+}
+.mainLayout,
+.mainContent {
+  min-height: fit-content;
+}

@@ -1,0 +1,4 @@
+.emptyLayout,
+.emptyContent {
+  min-height: fit-content;
+}

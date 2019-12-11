@@ -1,29 +1,8 @@
-.homeLayout {
-  min-height: fit-content;
-}
-.homeHeader {
-  position: fixed;
-  z-index: 1;
-  width: 100%;
-  background-color: white;
-}
-.rightHeader {
-  float: right;
-}
-.headerItem {
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
 .homeContent {
   padding: 0 50px;
-  margin-top: 64;
   min-height: fit-content;
 }
 .carouselItem img {
   min-width: 100%;
   max-height: 450px;
-}
-.homeFooter {
-  text-align: center;
 }
