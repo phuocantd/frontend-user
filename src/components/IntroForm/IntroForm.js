@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button, Tag, Tooltip, Input, Icon } from 'antd';
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 class IntroForm extends Component {
   constructor(props) {
@@ -25,6 +27,10 @@ class IntroForm extends Component {
     this.setState({ inputValue: e.target.value });
   };
 
+  saveInputRef = input => {
+    this.input = input;
+  };
+
   handleInputConfirm = () => {
     const { inputValue } = this.state;
     let { tags } = this.state;
@@ -42,16 +48,6 @@ class IntroForm extends Component {
     const { form } = this.props;
     const { inputVisible, tags, inputValue } = this.state;
     const { getFieldDecorator } = form;
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 }
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 }
-      }
-    };
     const tailFormItemLayout = {
       wrapperCol: {
         xs: {
@@ -65,61 +61,90 @@ class IntroForm extends Component {
       }
     };
     return (
-      <Form
-        labelCol={formItemLayout.labelCol}
-        wrapperCol={formItemLayout.wrapperCol}
-        onSubmit={this.handleSubmit}
-        style={{
-          width: '450px'
-        }}
-      >
-        <Form.Item label="Skill">
-          {getFieldDecorator('tags', {
+      <Form onSubmit={this.handleSubmit}>
+        <Form.Item label="Price" style={{ width: 350 }}>
+          {getFieldDecorator('price', {
             rules: [
               {
                 required: true,
-                message: 'Please input your address!'
+                message: 'Please input your price per hours'
               }
             ]
-          })(
-            <div>
-              {tags.map(tag => {
-                const isLongTag = tag.length > 20;
-                const tagElem = (
-                  <Tag key={tag} onClose={() => this.handleClose(tag)} closable>
-                    {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-                  </Tag>
-                );
-                return isLongTag ? (
-                  <Tooltip title={tag} key={tag}>
-                    {tagElem}
-                  </Tooltip>
-                ) : (
-                  tagElem
-                );
-              })}
-              {inputVisible && (
-                <Input
-                  ref={this.saveInputRef}
-                  type="text"
-                  size="small"
-                  style={{ width: 78 }}
-                  value={inputValue}
-                  onChange={this.handleInputChange}
-                  onBlur={this.handleInputConfirm}
-                  onPressEnter={this.handleInputConfirm}
-                />
-              )}
-              {!inputVisible && (
-                <Tag
-                  onClick={this.showInput}
-                  style={{ background: '#fff', borderStyle: 'dashed' }}
-                >
-                  <Icon type="plus" /> New Tag
+          })(<Input suffix="₫" addonAfter="* 1000VND" />)}
+        </Form.Item>
+        <Form.Item label="Skill">
+          <div>
+            {tags.map(tag => {
+              const isLongTag = tag.length > 20;
+              const tagElem = (
+                <Tag key={tag} onClose={() => this.handleClose(tag)} closable>
+                  {isLongTag ? `${tag.slice(0, 20)}...` : tag}
                 </Tag>
-              )}
-            </div>
-          )}
+              );
+              return isLongTag ? (
+                <Tooltip title={tag} key={tag}>
+                  {tagElem}
+                </Tooltip>
+              ) : (
+                tagElem
+              );
+            })}
+            {inputVisible && (
+              <Input
+                ref={this.saveInputRef}
+                type="text"
+                size="small"
+                style={{ width: 78 }}
+                value={inputValue}
+                onChange={this.handleInputChange}
+                onBlur={this.handleInputConfirm}
+                onPressEnter={this.handleInputConfirm}
+              />
+            )}
+            {!inputVisible && (
+              <Tag
+                onClick={this.showInput}
+                style={{ background: '#fff', borderStyle: 'dashed' }}
+              >
+                <Icon type="plus" /> New Tag
+              </Tag>
+            )}
+          </div>
+        </Form.Item>
+        <Form.Item label="Introduction">
+          <CKEditor
+            editor={ClassicEditor}
+            config={{
+              toolbar: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'link',
+                'bulletedList',
+                'numberedList',
+                '|',
+                'blockQuote',
+                'undo',
+                'redo'
+              ]
+            }}
+            data="<p>Tell something about yourself</p>"
+            onInit={editor => {
+              // You can store the "editor" and use when it is needed.
+              console.log('Editor is ready to use!', editor);
+            }}
+            onChange={(event, editor) => {
+              const data = editor.getData();
+              console.log({ event, editor, data });
+            }}
+            onBlur={(event, editor) => {
+              console.log('Blur.', editor);
+            }}
+            onFocus={(event, editor) => {
+              console.log('Focus.', editor);
+            }}
+          />
         </Form.Item>
         <Form.Item wrapperCol={tailFormItemLayout.wrapperCol}>
           <Button type="primary" htmlType="submit">

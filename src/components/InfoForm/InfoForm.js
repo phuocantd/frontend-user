@@ -99,7 +99,7 @@ class InfoForm extends Component {
     };
     return (
       <>
-        <Row type="flex" justify="center" align="center">
+        <Row type="flex" justify="center" align="middle">
           <Col>
             <Upload
               name="file"

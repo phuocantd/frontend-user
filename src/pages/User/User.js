@@ -3,6 +3,8 @@ import { Layout, Card } from 'antd';
 import { connect } from 'react-redux';
 import { updateUser } from '../../actions/user';
 import InfoForm from '../../components/InfoForm/InfoForm';
+import IntroForm from '../../components/IntroForm/IntroForm';
+import SecurForm from '../../components/SecurForm/SecurForm';
 
 const tabList = [
   {
@@ -19,13 +21,15 @@ const tabList = [
   }
 ];
 const contentList = {
-  info: <InfoForm />
+  info: <InfoForm />,
+  intro: <IntroForm />,
+  secur: <SecurForm />
 };
 class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentTab: 'info'
+      currentTab: 'intro'
     };
   }
 
@@ -46,11 +50,11 @@ class User extends Component {
         }}
       >
         <Card
-          style={{ width: 500 }}
+          style={{ minWidth: 1000, minHeight: 600 }}
           hoverable
           tabList={tabList}
           activeTabKey={currentTab}
-          onTabChange={() => this.handleChangeTab()}
+          onTabChange={key => this.handleChangeTab(key)}
         >
           {contentList[currentTab]}
         </Card>
