@@ -1,15 +1,30 @@
 import React, { PureComponent } from 'react';
-import { Layout } from 'antd';
+import { Layout, message } from 'antd';
+import { connect } from 'react-redux';
+import _ from 'lodash';
 import './Main.css';
 import PublicHeader from '../../components/Header/PublicHeader/PublicHeader';
+import { handleGetUser } from '../../actions/user';
+import PrivateHeader from '../../components/Header/PrivateHeader/PrivateHeader';
 
 const { Content, Footer } = Layout;
 class Main extends PureComponent {
+  componentDidMount() {
+    const { isLoggedIn, token, getUser } = this.props;
+    if (isLoggedIn) {
+      getUser({ token, message });
+    }
+  }
+
   render() {
-    const { children } = this.props;
+    const { children, user } = this.props;
+    let header = <PublicHeader />;
+    if (!_.isEmpty(user)) {
+      header = <PrivateHeader avatar={user.avatar} name={user.name} />;
+    }
     return (
       <Layout className="mainLayout">
-        <PublicHeader />
+        {header}
         <Content className="mainContent">{children}</Content>
         <Footer className="mainFooter">
           Ant Design ©2019 Created by ZTeam
@@ -19,4 +34,20 @@ class Main extends PureComponent {
   }
 }
 
-export default Main;
+const mapStateToProps = state => {
+  return {
+    isLoggedIn: state.user.isLoggedIn,
+    user: state.user.user,
+    token: state.user.token
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getUser: item => {
+      dispatch(handleGetUser(item));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

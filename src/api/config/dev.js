@@ -6,5 +6,6 @@ export default {
   login_facebook: () => `${DOMAIN}/auth/facebook`,
   login_google: () => `${DOMAIN}/auth/google`,
   upload_avatar: () => `${DOMAIN}/user/upload`,
-  update_user: () => `${DOMAIN}/user/update`
+  update_user: () => `${DOMAIN}/user/update`,
+  get_user: () => `${DOMAIN}/auth/me`
 };
