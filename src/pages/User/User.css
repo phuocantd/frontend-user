@@ -2,3 +2,16 @@
   width: 128px;
   height: 128px;
 }
+
+.userLayout {
+  height: 100vh;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userContainer {
+  min-width: 1000px;
+  min-height: 600px;
+}

@@ -5,7 +5,7 @@ export default {
   register: () => `${DOMAIN}/auth/register`,
   login_facebook: () => `${DOMAIN}/auth/facebook`,
   login_google: () => `${DOMAIN}/auth/google`,
-  upload_avatar: () => `${DOMAIN}/user/upload`,
-  update_user: () => `${DOMAIN}/user/update`,
+  get_upload_avatar_url: () => `${DOMAIN}/users/upload`,
+  update_user: id => `${DOMAIN}/users/${id}`,
   get_user: () => `${DOMAIN}/auth/me`
 };

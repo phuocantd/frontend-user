@@ -6,21 +6,12 @@ export default {
     const url = config.url.get_user();
     return api.getApiWithToken(url, token);
   },
-  updateUser(email, oldPassword, newPassword, passwordConfirm, name, token) {
+  updateUser(name, address, password, token) {
     const url = config.url.update_user();
-    const request = {
-      headers: { Authorization: `Bearer ${token}` }
-    };
-    return api.postApi(
-      url,
-      {
-        email,
-        oldPassword,
-        newPassword,
-        passwordConfirm,
-        name
-      },
-      request
-    );
+    return api.postApiWithToken(url, token, {
+      name,
+      address,
+      password
+    });
   }
 };

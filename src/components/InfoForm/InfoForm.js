@@ -60,12 +60,10 @@ class InfoForm extends Component {
   };
 
   render() {
-    const { form, token } = this.props;
+    const { form, token, user } = this.props;
     const { isLoading } = this.state;
     const { getFieldDecorator } = form;
     const uploadUrl = config.url.upload_avatar();
-    const avatar =
-      'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png';
     const uploadButton = (
       <div>
         <Icon type={isLoading ? 'loading' : 'plus'} />
@@ -111,8 +109,8 @@ class InfoForm extends Component {
               beforeUpload={this.beforeUpload}
               onChange={this.handleChange}
             >
-              {avatar ? (
-                <img src={avatar} alt="avatar" style={{ width: '100%' }} />
+              {user.avatar ? (
+                <img src={user.avatar} alt="avatar" style={{ width: '100%' }} />
               ) : (
                 uploadButton
               )}
@@ -140,7 +138,8 @@ class InfoForm extends Component {
                       required: true,
                       message: 'Please input your E-mail!'
                     }
-                  ]
+                  ],
+                  initialValue: user.email
                 })(<Input readOnly />)}
               </Form.Item>
               <Form.Item
@@ -157,10 +156,11 @@ class InfoForm extends Component {
                   rules: [
                     {
                       required: true,
-                      message: 'Please input your nickname!',
+                      message: 'Please input your name!',
                       whitespace: true
                     }
-                  ]
+                  ],
+                  initialValue: user.name || ''
                 })(<Input />)}
               </Form.Item>
               <Form.Item label="Address">
@@ -171,7 +171,8 @@ class InfoForm extends Component {
                       message: 'Please input your address!',
                       whitespace: true
                     }
-                  ]
+                  ],
+                  initialValue: user.address || ''
                 })(<Input />)}
               </Form.Item>
               <Form.Item label="Password" hasFeedback>

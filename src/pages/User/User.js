@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Layout, Card } from 'antd';
 import { connect } from 'react-redux';
-import { updateUser } from '../../actions/user';
 import InfoForm from '../../components/InfoForm/InfoForm';
 import IntroForm from '../../components/IntroForm/IntroForm';
 import SecurForm from '../../components/SecurForm/SecurForm';
+import './User.css';
 
 const tabList = [
   {
@@ -20,43 +20,55 @@ const tabList = [
     tab: 'Security'
   }
 ];
-const contentList = {
-  info: <InfoForm />,
-  intro: <IntroForm />,
-  secur: <SecurForm />
-};
+const tabListStudent = [
+  {
+    key: 'info',
+    tab: 'Infomation'
+  },
+  {
+    key: 'secur',
+    tab: 'Security'
+  }
+];
 class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentTab: 'intro'
+      currentKey: 'info'
     };
   }
 
   handleChangeTab = key => {
-    this.setState({ currentTab: key });
+    this.setState({ currentKey: key });
   };
 
   render() {
-    const { currentTab } = this.state;
+    const { user, token } = this.props;
+    const { currentKey } = this.state;
+    let currentTab = null;
+    let currentTabList = tabList;
+    if (user.role === 'student') {
+      currentTabList = tabListStudent;
+    }
+    if (currentKey === 'info') {
+      currentTab = <InfoForm user={user} token={token} />;
+    }
+    if (currentKey === 'intro') {
+      currentTab = <IntroForm user={user} token={token} />;
+    }
+    if (currentKey === 'secur') {
+      currentTab = <SecurForm user={user} token={token} />;
+    }
     return (
-      <Layout
-        style={{
-          height: '100vh',
-          backgroundColor: '#fff',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      >
+      <Layout className="userLayout">
         <Card
-          style={{ minWidth: 1000, minHeight: 600 }}
-          hoverable
-          tabList={tabList}
-          activeTabKey={currentTab}
+          className="userContainer"
+          hoverabFle
+          tabList={currentTabList}
+          activeTabKey={currentKey}
           onTabChange={key => this.handleChangeTab(key)}
         >
-          {contentList[currentTab]}
+          {currentTab}
         </Card>
       </Layout>
     );
@@ -70,12 +82,4 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    updateUserInfo: item => {
-      dispatch(updateUser(item));
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(User);
+export default connect(mapStateToProps)(User);
