@@ -63,7 +63,7 @@ class InfoForm extends Component {
     const { form, token, user } = this.props;
     const { isLoading } = this.state;
     const { getFieldDecorator } = form;
-    const uploadUrl = config.url.upload_avatar();
+    const uploadUrl = config.url.get_upload_avatar_url();
     const uploadButton = (
       <div>
         <Icon type={isLoading ? 'loading' : 'plus'} />

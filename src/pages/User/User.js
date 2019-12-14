@@ -63,7 +63,7 @@ class User extends Component {
       <Layout className="userLayout">
         <Card
           className="userContainer"
-          hoverabFle
+          hoverable
           tabList={currentTabList}
           activeTabKey={currentKey}
           onTabChange={key => this.handleChangeTab(key)}
