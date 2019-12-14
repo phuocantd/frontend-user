@@ -7,5 +7,8 @@ export default {
   login_google: () => `${DOMAIN}/auth/google`,
   get_upload_avatar_url: () => `${DOMAIN}/users/upload`,
   update_user: id => `${DOMAIN}/users/${id}`,
-  get_user: () => `${DOMAIN}/auth/me`
+  get_user: () => `${DOMAIN}/auth/me`,
+  get_tutors: () => `${DOMAIN}/tutors`,
+  get_tags: () => `${DOMAIN}/tags`,
+  get_specializations: () => `${DOMAIN}/specializations`
 };
