@@ -133,10 +133,13 @@ export const handleGetUser = item => {
         dispatch(endRequest());
         if (response.success) {
           dispatch(updateUser(response.data.userInfo || {}));
+        } else {
+          dispatch(logout());
         }
       })
       .catch(err => {
         dispatch(endRequest());
+        dispatch(logout());
         if (err.response) {
           item.message.error(err.response.data.error);
         } else {

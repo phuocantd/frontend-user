@@ -1,19 +1,16 @@
 import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Button, Typography } from 'antd';
+import { Layout, Button } from 'antd';
 import '../Header.css';
 
 const { Header } = Layout;
-const { Title } = Typography;
 export default class PublicHeader extends PureComponent {
   render() {
     return (
       <Header className="mainHeader">
         <div className="leftHeader">
-          <Link to="/">
-            <Title level={2} className="logo">
-              Uber for Tutor
-            </Title>
+          <Link to="/" className="logo">
+            Uber for Tutor
           </Link>
         </div>
         <div className="rightHeader">

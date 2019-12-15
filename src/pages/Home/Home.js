@@ -1,8 +1,14 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Layout, Carousel, Row, Select, Col, Input } from 'antd';
+import { connect } from 'react-redux';
 import _ from 'lodash';
 import './Home.css';
 import CardInfo from '../../components/CardInfo/CardInfo';
+import {
+  getTutorsNoCondition,
+  getTagsList,
+  getSpecializationsList
+} from '../../actions/tutor';
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -11,201 +17,43 @@ const image2 = require('../../assets/images/image2.jpg');
 const image3 = require('../../assets/images/image3.jpg');
 const image4 = require('../../assets/images/image4.jpg');
 
-const sampleData = [
-  {
-    idUser: 0,
-    Name: 'Tientd',
-    Email: 'tdtien.it@gmail.com',
-    Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    PaymentPerHour: 15,
-    SuccessRating: 100,
-    Specialization: 'Backend Software Engineer',
-    SelfIntroduction: 'Hello everybody, Im very happy to meet all of you',
-    Tags: [
-      'WordPress',
-      'HTML5',
-      'Web Design',
-      'Graphic Design',
-      'CSS3',
-      'Mobile UI Design'
-    ]
+const sample = {
+  _id: 0,
+  tags: [],
+  userInfo: {
+    _id: 0,
+    avatar: '',
+    isActive: true,
+    email: '',
+    name: 'Unknown',
+    role: 'tutor',
+    address: 'Unknown'
   },
-  {
-    idUser: 1,
-    Name: 'Tientd',
-    Email: 'tdtien.it@gmail.com',
-    Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    PaymentPerHour: 15,
-    SuccessRating: 100,
-    Specialization: 'Backend Software Engineer',
-    SelfIntroduction: 'Hello everybody, Im very happy to meet all of you',
-    Tags: [
-      'WordPress',
-      'HTML5',
-      'Web Design',
-      'Graphic Design',
-      'CSS3',
-      'Mobile UI Design'
-    ]
+  averageRating: 0,
+  paymentPerHour: 0,
+  selfIntro: '',
+  specialization: {
+    _id: 0,
+    isActive: true,
+    name: ''
   },
-  {
-    idUser: 2,
-    Name: 'Tientd',
-    Email: 'tdtien.it@gmail.com',
-    Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    PaymentPerHour: 15,
-    SuccessRating: 100,
-    Specialization: 'Backend Software Engineer',
-    SelfIntroduction: 'Hello everybody, Im very happy to meet all of you',
-    Tags: [
-      'WordPress',
-      'HTML5',
-      'Web Design',
-      'Graphic Design',
-      'CSS3',
-      'Mobile UI Design'
-    ]
-  },
-  {
-    idUser: 3,
-    Name: 'Tientd',
-    Email: 'tdtien.it@gmail.com',
-    Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    PaymentPerHour: 15,
-    SuccessRating: 100,
-    Specialization: 'Backend Software Engineer',
-    SelfIntroduction: 'Hello everybody, Im very happy to meet all of you',
-    Tags: [
-      'WordPress',
-      'HTML5',
-      'Web Design',
-      'Graphic Design',
-      'CSS3',
-      'Mobile UI Design'
-    ]
-  },
-  {
-    idUser: 4,
-    Name: 'Tientd',
-    Email: 'tdtien.it@gmail.com',
-    Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    PaymentPerHour: 15,
-    SuccessRating: 100,
-    Specialization: 'Backend Software Engineer',
-    SelfIntroduction: 'Hello everybody, Im very happy to meet all of you',
-    Tags: [
-      'WordPress',
-      'HTML5',
-      'Web Design',
-      'Graphic Design',
-      'CSS3',
-      'Mobile UI Design'
-    ]
-  },
-  {
-    idUser: 5,
-    Name: 'Tientd',
-    Email: 'tdtien.it@gmail.com',
-    Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    PaymentPerHour: 15,
-    SuccessRating: 100,
-    Specialization: 'Backend Software Engineer',
-    SelfIntroduction: 'Hello everybody, Im very happy to meet all of you',
-    Tags: [
-      'WordPress',
-      'HTML5',
-      'Web Design',
-      'Graphic Design',
-      'CSS3',
-      'Mobile UI Design'
-    ]
-  },
-  {
-    idUser: 6,
-    Name: 'Tientd',
-    Email: 'tdtien.it@gmail.com',
-    Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    PaymentPerHour: 15,
-    SuccessRating: 100,
-    Specialization: 'Backend Software Engineer',
-    SelfIntroduction: 'Hello everybody, Im very happy to meet all of you',
-    Tags: [
-      'WordPress',
-      'HTML5',
-      'Web Design',
-      'Graphic Design',
-      'CSS3',
-      'Mobile UI Design'
-    ]
-  },
-  {
-    idUser: 7,
-    Name: 'Tientd',
-    Email: 'tdtien.it@gmail.com',
-    Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    PaymentPerHour: 15,
-    SuccessRating: 100,
-    Specialization: 'Backend Software Engineer',
-    SelfIntroduction: 'Hello everybody, Im very happy to meet all of you',
-    Tags: [
-      'WordPress',
-      'HTML5',
-      'Web Design',
-      'Graphic Design',
-      'CSS3',
-      'Mobile UI Design'
-    ]
-  },
-  {
-    idUser: 8,
-    Name: 'Tientd',
-    Email: 'tdtien.it@gmail.com',
-    Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    PaymentPerHour: 15,
-    SuccessRating: 100,
-    Specialization: 'Backend Software Engineer',
-    SelfIntroduction: 'Hello everybody, Im very happy to meet all of you',
-    Tags: [
-      'WordPress',
-      'HTML5',
-      'Web Design',
-      'Graphic Design',
-      'CSS3',
-      'Mobile UI Design'
-    ]
-  },
-  {
-    idUser: 9,
-    Name: 'Tientd',
-    Email: 'tdtien.it@gmail.com',
-    Avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    PaymentPerHour: 15,
-    SuccessRating: 100,
-    Specialization: 'Backend Software Engineer',
-    SelfIntroduction: 'Hello everybody, Im very happy to meet all of you',
-    Tags: [
-      'WordPress',
-      'HTML5',
-      'Web Design',
-      'Graphic Design',
-      'CSS3',
-      'Mobile UI Design'
-    ]
-  }
-];
-class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.findTutor = React.createRef();
-  }
+  successRate: 0
+};
 
-  gotoFindTutor = () => {
-    document
-      .getElementsByClassName('homeContent')[0]
-      .scrollIntoView({ behavior: 'smooth' });
-  };
+class Home extends PureComponent {
+  componentDidMount() {
+    const { fetchSpecializations, fetchTags, fetchTutor } = this.props;
+    fetchSpecializations();
+    fetchTags();
+    fetchTutor();
+  }
 
   render() {
+    const { isRequest, tutors, tags, specializations } = this.props;
+    let dataTutor = tutors;
+    if (isRequest) {
+      dataTutor = Array.from(Array(8), () => sample);
+    }
     return (
       <Layout className="homeLayout">
         <Carousel autoplay draggable>
@@ -222,15 +70,15 @@ class Home extends Component {
             <img src={image4} alt="studying" />
           </div>
         </Carousel>
-        <Content className="homeContent" ref={this.findTutor}>
-          <Row gutter={16} style={{ marginTop: 10, marginBottom: 10 }}>
+        <Content className="homeContent">
+          <Row gutter={16} style={{ margin: '10px 0' }}>
             <strong>Filters: </strong>
             &emsp;
             <Input placeholder="Type location" style={{ width: 200 }} />
             &emsp;
             <Select
               style={{ width: 200 }}
-              placeholder="Select salary"
+              placeholder="Select salary per hour"
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.props.children
@@ -244,12 +92,48 @@ class Home extends Component {
               <Option value="1000-5000">From 1000 to 5000</Option>
               <Option value="5000">Above 5000</Option>
             </Select>
+            &emsp;
+            <Select
+              mode="multiple"
+              style={{ width: 200 }}
+              placeholder="Select specializations"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.props.children
+                  .toLowerCase()
+                  .indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              {specializations.map(specialization => (
+                <Option value={specialization.name} key={_.uniqueId('option_')}>
+                  {specialization.name}
+                </Option>
+              ))}
+            </Select>
+            &emsp;
+            <Select
+              mode="multiple"
+              style={{ width: 200 }}
+              placeholder="Select tags"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.props.children
+                  .toLowerCase()
+                  .indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              {tags.map(tag => (
+                <Option value={tag.name} key={_.uniqueId('option_')}>
+                  {tag.name}
+                </Option>
+              ))}
+            </Select>
           </Row>
-          {_.chunk(sampleData, 4).map(chunk => (
+          {_.chunk(dataTutor, 4).map(chunk => (
             <Row gutter={[16, 16]} key={_.uniqueId('row_')} type="flex">
               {chunk.map(data => (
                 <Col key={_.uniqueId('col_')} span={6}>
-                  <CardInfo data={data} />
+                  <CardInfo data={data} loading={isRequest} />
                 </Col>
               ))}
             </Row>
@@ -260,4 +144,27 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapStateToProps = state => {
+  return {
+    isRequest: state.tutor.isRequest,
+    tutors: state.tutor.tutors,
+    tags: state.tutor.tags,
+    specializations: state.tutor.specializations
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchTutor: () => {
+      dispatch(getTutorsNoCondition());
+    },
+    fetchTags: () => {
+      dispatch(getTagsList());
+    },
+    fetchSpecializations: () => {
+      dispatch(getSpecializationsList());
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
