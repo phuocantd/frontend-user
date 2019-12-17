@@ -8,10 +8,13 @@ export default {
   get_upload_avatar_url: () => `${DOMAIN}/users/upload`,
   update_user: id => `${DOMAIN}/users/${id}`,
   get_user: () => `${DOMAIN}/auth/me`,
-  get_tutors: () => `${DOMAIN}/tutors`,
+  tutors: () => `${DOMAIN}/tutors`,
+  detail_tutor: id => `${DOMAIN}/tutors/${id}`,
   get_tags: () => `${DOMAIN}/tags`,
   get_specializations: () => `${DOMAIN}/specializations`,
   contracts: () => `${DOMAIN}/contracts`,
   detail_contract: id => `${DOMAIN}/contracts/${id}`,
-  create_complaint: () => `${DOMAIN}/api/complaints`
+  complaints: () => `${DOMAIN}/complaints`,
+  complaint_detail: id => `${DOMAIN}/complaints/${id}`,
+  statistics: () => `${DOMAIN}/statisctics/contracts`
 };
