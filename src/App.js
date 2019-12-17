@@ -9,6 +9,7 @@ import Home from './pages/Home/Home';
 import User from './pages/User/User';
 import Empty from './layouts/Empty/Empty';
 import RouteWithLayout from './routes/RouteWithLayout';
+import Dashboard from './pages/Dashboard/Dashboard';
 
 function App() {
   return (
@@ -17,11 +18,10 @@ function App() {
         <RouteWithLayout layout={Main} path="/" exact component={Home} />
         <RouteWithLayout
           layout={Main}
-          path="/user"
-          exact
-          component={User}
-          authed
+          path="/dashboard"
+          component={Dashboard}
         />
+        <RouteWithLayout layout={Main} path="/user" component={User} authed />
         <RouteWithLayout layout={Empty} path="/login" component={Login} />
         <RouteWithLayout layout={Empty} path="/register" component={Register} />
       </Switch>
