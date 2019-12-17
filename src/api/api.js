@@ -54,5 +54,21 @@ export default {
       .catch(error => {
         return Promise.reject(error);
       });
+  },
+  putApiWithToken(url, token, data = {}, request = {}) {
+    const additional = {
+      ...request,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+    return axios
+      .put(url, data, additional)
+      .then(response => {
+        return Promise.resolve(response.data);
+      })
+      .catch(error => {
+        return Promise.reject(error);
+      });
   }
 };

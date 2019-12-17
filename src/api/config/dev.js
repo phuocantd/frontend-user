@@ -10,5 +10,8 @@ export default {
   get_user: () => `${DOMAIN}/auth/me`,
   get_tutors: () => `${DOMAIN}/tutors`,
   get_tags: () => `${DOMAIN}/tags`,
-  get_specializations: () => `${DOMAIN}/specializations`
+  get_specializations: () => `${DOMAIN}/specializations`,
+  contracts: () => `${DOMAIN}/contracts`,
+  detail_contract: id => `${DOMAIN}/contracts/${id}`,
+  create_complaint: () => `${DOMAIN}/api/complaints`
 };
