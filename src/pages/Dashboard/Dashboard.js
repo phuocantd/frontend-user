@@ -3,6 +3,7 @@ import { Layout, Menu, Icon } from 'antd';
 import { Link, Route } from 'react-router-dom';
 import './Dashboard.css';
 import Contract from '../Contract/Contract';
+import Complaints from '../Complaints/Complaints';
 
 const { Sider, Content } = Layout;
 export default class Dashboard extends PureComponent {
@@ -40,6 +41,9 @@ export default class Dashboard extends PureComponent {
         <Content className="dashboardContent">
           <Route path={`${path}/contract`} exact>
             <Contract />
+          </Route>
+          <Route path={`${path}/complaint`} exact>
+            <Complaints />
           </Route>
         </Content>
       </Layout>
