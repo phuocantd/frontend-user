@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Layout, Tag, Typography, Statistic, Table } from 'antd';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import services from '../../api/services';
+import './Contract.css';
 
 const { Paragraph } = Typography;
 const columns = [
@@ -61,6 +63,15 @@ const columns = [
     dataIndex: 'contractAmount',
     key: 'contractAmount',
     render: amount => <Statistic value={amount} />
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    render: () => (
+      <span>
+        <Link to="/dashboard/complaint/create">Complaint</Link>
+      </span>
+    )
   }
 ];
 class Contract extends Component {
@@ -83,8 +94,13 @@ class Contract extends Component {
   render() {
     const { contracts } = this.state;
     return (
-      <Layout>
-        <Table columns={columns} dataSource={contracts} rowKey="_id" />
+      <Layout className="contractLayout">
+        <Table
+          columns={columns}
+          dataSource={contracts}
+          rowKey="_id"
+          className="contractTable"
+        />
       </Layout>
     );
   }

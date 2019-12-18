@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Layout, Tag, Typography, Table } from 'antd';
 import { connect } from 'react-redux';
 import services from '../../api/services';
+import './Complaint.css';
 
 const { Paragraph } = Typography;
 const columns = [
@@ -47,7 +48,7 @@ const columns = [
     )
   }
 ];
-class Complaints extends Component {
+class Complaint extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -67,8 +68,13 @@ class Complaints extends Component {
   render() {
     const { complaints } = this.state;
     return (
-      <Layout>
-        <Table columns={columns} dataSource={complaints} rowKey="_id" />
+      <Layout className="complaintLayout">
+        <Table
+          columns={columns}
+          dataSource={complaints}
+          rowKey="_id"
+          className="complaintTable"
+        />
       </Layout>
     );
   }
@@ -80,4 +86,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Complaints);
+export default connect(mapStateToProps)(Complaint);
