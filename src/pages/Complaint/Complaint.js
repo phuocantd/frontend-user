@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Layout, Tag, Typography, Table } from 'antd';
+import { Layout, Tag, Table } from 'antd';
 import { connect } from 'react-redux';
 import services from '../../api/services';
 import './Complaint.css';
 
-const { Paragraph } = Typography;
 const columns = [
   {
     title: 'Contract',
@@ -41,32 +40,36 @@ const columns = [
     title: 'Description',
     dataIndex: 'description',
     key: 'description',
-    render: desc => (
-      <Paragraph ellipsis style={{ width: 200 }}>
-        {desc}
-      </Paragraph>
-    )
+    ellipsis: true
   }
 ];
 class Complaint extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      complaints: []
+      complaints: [],
+      isLoading: true
     };
   }
 
   componentDidMount() {
     const { token } = this.props;
-    services.complaint.getComplaints(token).then(response => {
-      if (response.success) {
-        this.setState({ complaints: response.data.results });
-      }
-    });
+    this.setState({ isLoading: true });
+    services.complaint
+      .getComplaints(token)
+      .then(response => {
+        this.setState({ isLoading: false });
+        if (response.success) {
+          this.setState({ complaints: response.data.results });
+        }
+      })
+      .catch(() => {
+        this.setState({ isLoading: false });
+      });
   }
 
   render() {
-    const { complaints } = this.state;
+    const { complaints, isLoading } = this.state;
     return (
       <Layout className="complaintLayout">
         <Table
@@ -74,6 +77,7 @@ class Complaint extends Component {
           dataSource={complaints}
           rowKey="_id"
           className="complaintTable"
+          loading={isLoading}
         />
       </Layout>
     );

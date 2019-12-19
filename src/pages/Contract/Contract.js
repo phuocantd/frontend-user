@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Layout, Tag, Typography, Statistic, Table } from 'antd';
+import { Layout, Tag, Statistic, Table } from 'antd';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import services from '../../api/services';
 import './Contract.css';
 
-const { Paragraph } = Typography;
 const columns = [
   {
     title: 'Title',
@@ -37,11 +36,7 @@ const columns = [
     title: 'Description',
     dataIndex: 'description',
     key: 'description',
-    render: desc => (
-      <Paragraph ellipsis style={{ width: 200 }}>
-        {desc}
-      </Paragraph>
-    )
+    ellipsis: true
   },
   {
     title: 'Tutor',
@@ -78,21 +73,31 @@ class Contract extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      contracts: []
+      contracts: [],
+      isLoading: true
     };
   }
 
   componentDidMount() {
     const { token } = this.props;
-    services.contract.getContracts(token).then(response => {
-      if (response.success) {
-        this.setState({ contracts: response.data.results });
-      }
-    });
+    this.setState({ isLoading: true });
+    services.contract
+      .getContracts(token)
+      .then(response => {
+        this.setState({ isLoading: false });
+        if (response.success) {
+          this.setState({ contracts: response.data.results });
+        }
+      })
+      .catch(() => {
+        this.setState({ isLoading: false });
+      });
   }
 
   render() {
-    const { contracts } = this.state;
+    const { history, match } = this.props;
+    const { path } = match;
+    const { contracts, isLoading } = this.state;
     return (
       <Layout className="contractLayout">
         <Table
@@ -100,6 +105,14 @@ class Contract extends Component {
           dataSource={contracts}
           rowKey="_id"
           className="contractTable"
+          loading={isLoading}
+          onRow={record => {
+            return {
+              onClick: () => {
+                history.push(`${path}/${record._id}`);
+              } // click row
+            };
+          }}
         />
       </Layout>
     );
