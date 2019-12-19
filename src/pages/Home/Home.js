@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Layout, Carousel, Row, Select, Col, Input } from 'antd';
+import { Layout, Carousel, Row, Select, Col, Input, message } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import './Home.css';
@@ -43,9 +43,9 @@ const sample = {
 class Home extends PureComponent {
   componentDidMount() {
     const { fetchSpecializations, fetchTags, fetchTutor } = this.props;
-    fetchSpecializations();
-    fetchTags();
-    fetchTutor();
+    fetchSpecializations({ message });
+    fetchTags({ message });
+    fetchTutor({ message });
   }
 
   render() {
@@ -155,14 +155,14 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchTutor: () => {
-      dispatch(getTutorsNoCondition());
+    fetchTutor: item => {
+      dispatch(getTutorsNoCondition(item));
     },
-    fetchTags: () => {
-      dispatch(getTagsList());
+    fetchTags: item => {
+      dispatch(getTagsList(item));
     },
-    fetchSpecializations: () => {
-      dispatch(getSpecializationsList());
+    fetchSpecializations: item => {
+      dispatch(getSpecializationsList(item));
     }
   };
 };

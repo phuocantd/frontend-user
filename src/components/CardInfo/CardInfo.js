@@ -62,10 +62,8 @@ export default class CardInfo extends Component {
               <Statistic value={data.paymentPerHour} suffix="/hr" />
             </Col>
             <Col span={12}>
-              <span role="img" aria-label="China">
-                🇨🇳
-              </span>
-              China
+              {(userInfo.address && userInfo.address.split(', ').pop()) ||
+                'Unknown'}
             </Col>
           </Row>
           <Divider style={{ marginTop: 10, marginBottom: 10 }} />
