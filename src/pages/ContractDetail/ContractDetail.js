@@ -12,14 +12,16 @@ import {
   Form,
   Button,
   Rate,
-  Spin
+  Spin,
+  Input
 } from 'antd';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import TextArea from 'antd/lib/input/TextArea';
 import services from '../../api/services';
 import './ContractDetail.css';
 
+const { TextArea } = Input;
 const { Step } = Steps;
 const steps = [
   {
@@ -69,7 +71,8 @@ class ContractDetail extends Component {
       current: 2,
       data: {},
       submitting: false,
-      value: '',
+      review: '',
+      rating: 0,
       isLoading: true
     };
   }
@@ -86,14 +89,22 @@ class ContractDetail extends Component {
         this.setState({ isLoading: false });
         if (response.success) {
           if (response.data.status === 'Happening') {
-            steps[2].title = 'Accepted';
-            steps[2].icon = 'check-circle';
+            steps[2] = {
+              title: 'Accepted',
+              icon: 'check-circle'
+            };
             this.setState({ current: 3 });
           }
-          if (
-            response.data.status === 'Requesting' ||
-            response.data.status === 'Canceled'
-          ) {
+          if (response.data.status === 'Requesting') {
+            steps[2] = {
+              title: 'Requesting',
+              icon: 'loading'
+            };
+            this.setState({ current: 2 });
+          }
+          if (response.data.status === 'Canceled') {
+            steps[2].title = 'Canceled';
+            steps[2].icon = 'close-circle';
             this.setState({ current: 2 });
           }
           if (response.data.status === 'Completed') {
@@ -109,9 +120,57 @@ class ContractDetail extends Component {
       });
   }
 
+  handleChange = e => {
+    this.setState({
+      review: e.target.value
+    });
+  };
+
+  handleSubmit = () => {
+    const { token } = this.props;
+    const { review, data } = this.state;
+    let { rating } = this.state;
+    if (typeof data.rating !== 'undefined') {
+      rating = data.rating;
+    }
+    if (rating <= 0) {
+      message.error('Please rate your tutor greater than 1 star');
+      return;
+    }
+    if (_.isEmpty(review)) {
+      message.error('Please write your review before submitting');
+      return;
+    }
+    this.setState({ submitting: true });
+    const dataUpdate = {
+      status: 'Completed',
+      isSuccess: true,
+      rating: `${rating}`,
+      review
+    };
+    services.contract
+      .updateContract(token, data._id, dataUpdate)
+      .then(response => {
+        this.setState({ submitting: false });
+        if (response.success) {
+          const changeData = _.clone(data);
+          changeData.rating = dataUpdate.rating;
+          changeData.review = dataUpdate.review;
+          this.setState({ data: changeData });
+        }
+      })
+      .catch(err => {
+        this.setState({ submitting: false });
+        if (err.response) {
+          message.error(err.response.data.error);
+        } else {
+          message.error(err.message);
+        }
+      });
+  };
+
   render() {
-    const { user } = this.props;
-    const { current, data, submitting, value, isLoading } = this.state;
+    const { current, data, submitting, review, rating, isLoading } = this.state;
     const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
     let status = 'default';
     switch (data.status) {
@@ -167,18 +226,34 @@ class ContractDetail extends Component {
             {data.description}
           </Descriptions.Item>
           <Descriptions.Item label="Rating" span={3}>
-            <Rate allowHalf defaultValue={4.5} />
+            <Rate
+              allowHalf
+              onChange={val => this.setState({ rating: val })}
+              value={data.rating || rating}
+              disabled={typeof data.rating !== 'undefined'}
+            />
           </Descriptions.Item>
           <Descriptions.Item label="Review" span={3}>
             <Comment
-              avatar={<Avatar src={user.avatar} alt={user.name} />}
-              content={
-                <Editor
-                  onChange={this.handleChange}
-                  onSubmit={this.handleSubmit}
-                  submitting={submitting}
-                  value={value}
+              avatar={
+                <Avatar
+                  src={
+                    (data.student && data.student.userInfo.avatar) || 'Unknown'
+                  }
                 />
+              }
+              author={(data.student && data.student.userInfo.name) || 'Unknown'}
+              content={
+                _.isEmpty(data.review) ? (
+                  <Editor
+                    onChange={this.handleChange}
+                    onSubmit={this.handleSubmit}
+                    submitting={submitting}
+                    value={review}
+                  />
+                ) : (
+                  data.review
+                )
               }
             />
           </Descriptions.Item>

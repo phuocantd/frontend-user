@@ -64,7 +64,12 @@ const columns = [
     key: 'action',
     render: () => (
       <span>
-        <Link to="/dashboard/complaint/create">Complaint</Link>
+        <Link
+          to="/dashboard/complaint/create"
+          onClick={e => e.stopPropagation()}
+        >
+          Complaint
+        </Link>
       </span>
     )
   }
