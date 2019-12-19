@@ -5,6 +5,16 @@ export default {
   register: () => `${DOMAIN}/auth/register`,
   login_facebook: () => `${DOMAIN}/auth/facebook`,
   login_google: () => `${DOMAIN}/auth/google`,
-  upload_avatar: () => `${DOMAIN}/user/upload`,
-  update_user: () => `${DOMAIN}/user/update`
+  get_upload_avatar_url: () => `${DOMAIN}/users/upload`,
+  update_user: id => `${DOMAIN}/users/${id}`,
+  get_user: () => `${DOMAIN}/auth/me`,
+  tutors: () => `${DOMAIN}/tutors`,
+  detail_tutor: id => `${DOMAIN}/tutors/${id}`,
+  get_tags: () => `${DOMAIN}/tags`,
+  get_specializations: () => `${DOMAIN}/specializations`,
+  contracts: () => `${DOMAIN}/contracts`,
+  detail_contract: id => `${DOMAIN}/contracts/${id}`,
+  complaints: () => `${DOMAIN}/complaints`,
+  complaint_detail: id => `${DOMAIN}/complaints/${id}`,
+  statistics: () => `${DOMAIN}/statisctics/contracts`
 };

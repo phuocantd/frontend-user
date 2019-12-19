@@ -1,6 +1,7 @@
 .homeContent {
   padding: 0 50px;
   min-height: fit-content;
+  background-color: #ffffff;
 }
 .carouselItem img {
   min-width: 100%;

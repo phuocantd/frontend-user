@@ -122,3 +122,29 @@ export const handleRegister = item => {
       });
   };
 };
+
+export const handleGetUser = item => {
+  const { token } = item;
+  return dispatch => {
+    dispatch(startRequest());
+    services.user
+      .getUser(token)
+      .then(response => {
+        dispatch(endRequest());
+        if (response.success) {
+          dispatch(updateUser(response.data.userInfo || {}));
+        } else {
+          dispatch(logout());
+        }
+      })
+      .catch(err => {
+        dispatch(endRequest());
+        dispatch(logout());
+        if (err.response) {
+          item.message.error(err.response.data.error);
+        } else {
+          item.message.error(err.message);
+        }
+      });
+  };
+};

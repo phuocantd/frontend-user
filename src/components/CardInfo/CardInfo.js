@@ -32,7 +32,8 @@ export default class CardInfo extends Component {
   };
 
   render() {
-    const { data } = this.props;
+    const { data, loading } = this.props;
+    const { userInfo } = data;
     const { visible } = this.state;
     return (
       <>
@@ -40,11 +41,12 @@ export default class CardInfo extends Component {
           hoverable
           style={{ width: 300 }}
           onClick={() => this.handleOpen()}
+          loading={loading}
         >
           <Meta
-            avatar={<Avatar size={64} src={data.Avatar} />}
-            title={<Link to="/profile">{data.Name}</Link>}
-            description={data.Specialization}
+            avatar={<Avatar size={64} src={userInfo.avatar} />}
+            title={<Link to="/profile">{userInfo.name}</Link>}
+            description={data.specialization.name}
           />
           <Row>
             <Popover
@@ -52,12 +54,12 @@ export default class CardInfo extends Component {
               title="JOB SUCCESS SCORE"
               overlayStyle={{ maxWidth: 200 }}
             >
-              <b>{data.SuccessRating}% SUCCESS</b>
+              <b>{Math.round(data.successRate * 100)}% SUCCESS</b>
             </Popover>
           </Row>
           <Row type="flex" gutter={16} align="middle" justify="center">
             <Col span={12}>
-              <Statistic value={data.PaymentPerHour} suffix="/hr" />
+              <Statistic value={data.paymentPerHour} suffix="/hr" />
             </Col>
             <Col span={12}>
               <span role="img" aria-label="China">
@@ -68,11 +70,13 @@ export default class CardInfo extends Component {
           </Row>
           <Divider style={{ marginTop: 10, marginBottom: 10 }} />
           <Row>
-            {data.Tags.map(tag => (
-              <Tag key={_.uniqueId('tag_')} className="marginVertical">
-                {tag}
-              </Tag>
-            ))}
+            {data.tags
+              .filter(tag => tag.isActive)
+              .map(tag => (
+                <Tag key={_.uniqueId('tag_')} className="marginVertical">
+                  {tag.name}
+                </Tag>
+              ))}
           </Row>
           <Row style={{ marginTop: 10, marginBottom: 10 }}>
             <Button
