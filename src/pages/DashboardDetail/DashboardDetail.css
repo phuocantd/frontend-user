@@ -1,0 +1,34 @@
+.dashboardDetailLayout {
+  background-color: #ffffff;
+  padding: 0 15px;
+}
+.bg-success {
+  background: #1b9e3e;
+  background: linear-gradient(45deg, #2eb85c 0%, #1b9e3e 100%);
+  border-color: #1b9e3e;
+}
+.bg-info {
+  background: #2982cc;
+  background: linear-gradient(45deg, #39f 0%, #2982cc 100%);
+  border-color: #2982cc;
+}
+.bg-danger {
+  background: #d93737;
+  background: linear-gradient(45deg, #e55353 0%, #d93737 100%);
+  border-color: #d93737;
+}
+.bg-warning {
+  background: #f6960b;
+  background: linear-gradient(45deg, #f9b115 0%, #f6960b 100%);
+  border-color: #f6960b;
+}
+.ant-statistic-title {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-weight: bold;
+}
+.cardIcon {
+  font-size: 30px;
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-weight: bold;
+  float: right;
+}

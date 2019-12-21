@@ -21,9 +21,11 @@ class PrivateHeader extends PureComponent {
           <Link to="/user" className="headerItem">
             <b>{name}</b>
           </Link>
-          <Button type="primary" onClick={() => logoutUser()}>
-            <b>Logout</b>
-          </Button>
+          <Link to="/">
+            <Button type="primary" onClick={() => logoutUser()}>
+              <b>Logout</b>
+            </Button>
+          </Link>
         </div>
       </Header>
     );

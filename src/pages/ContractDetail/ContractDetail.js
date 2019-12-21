@@ -13,24 +13,26 @@ import {
   Button,
   Rate,
   Spin,
-  Input
+  Input,
+  Popconfirm,
+  Row,
+  Typography
 } from 'antd';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import services from '../../api/services';
 import './ContractDetail.css';
+import ContractForm from '../../components/ContractForm/ContractForm';
 
 const { TextArea } = Input;
 const { Step } = Steps;
+const { Paragraph } = Typography;
+const ButtonGroup = Button.Group;
 const steps = [
   {
     title: 'Create contracts',
     icon: 'form'
-  },
-  {
-    title: 'Checkout',
-    icon: 'transaction'
   },
   {
     title: 'Requesting',
@@ -68,57 +70,89 @@ class ContractDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: 2,
+      current: 1,
       data: {},
       submitting: false,
+      confirming: false,
       review: '',
       rating: 0,
-      isLoading: true
+      isLoading: false
     };
   }
 
   componentDidMount() {
     const {
-      token,
       match: { params }
     } = this.props;
+    if (params.id === 'create') {
+      steps[1] = {
+        title: 'Requesting',
+        icon: 'loading-3-quarters'
+      };
+      this.setState({ current: 0 });
+    } else if (params.id === 'checkout') {
+      steps[1] = {
+        title: 'Requesting',
+        icon: 'loading-3-quarters'
+      };
+      this.setState({ current: 1 });
+    } else {
+      this.fetchDetailContract(params.id);
+    }
+  }
+
+  fetchDetailContract = id => {
+    const { token, history } = this.props;
     this.setState({ isLoading: true });
     services.contract
-      .getDetailContract(token, params.id)
+      .getDetailContract(token, id)
       .then(response => {
         this.setState({ isLoading: false });
         if (response.success) {
           if (response.data.status === 'Happening') {
-            steps[2] = {
+            steps[1] = {
               title: 'Accepted',
               icon: 'check-circle'
             };
-            this.setState({ current: 3 });
+            this.setState({ current: 2 });
           }
           if (response.data.status === 'Requesting') {
-            steps[2] = {
+            steps[1] = {
               title: 'Requesting',
               icon: 'loading'
             };
-            this.setState({ current: 2 });
+            this.setState({ current: 1 });
           }
           if (response.data.status === 'Canceled') {
-            steps[2].title = 'Canceled';
-            steps[2].icon = 'close-circle';
-            this.setState({ current: 2 });
+            steps[1] = {
+              title: 'Canceled',
+              icon: 'close-circle'
+            };
+            this.setState({ current: 1 });
           }
           if (response.data.status === 'Completed') {
-            this.setState({ current: 4 });
+            steps[1] = {
+              title: 'Requesting',
+              icon: 'loading'
+            };
+            this.setState({ current: 3 });
           }
           this.setState({ data: response.data });
         } else {
           message.error(response.error);
+          history.push('/dashboard/contract');
         }
       })
-      .catch(() => {
+      .catch(err => {
         this.setState({ isLoading: false });
+        if (err.response) {
+          message.error(err.response.data.error);
+        } else {
+          message.error(err.message);
+        }
+        history.push('/dashboard/contract');
       });
-  }
+  };
 
   handleChange = e => {
     this.setState({
@@ -169,8 +203,70 @@ class ContractDetail extends Component {
       });
   };
 
+  handleConfirm = status => {
+    this.setState({ confirming: true });
+    const { token } = this.props;
+    const { data } = this.state;
+    const dataUpdate = {
+      status
+    };
+    if (data._id) {
+      services.contract
+        .updateContract(token, data._id, dataUpdate)
+        .then(response => {
+          this.setState({ submitting: false });
+          if (response.success) {
+            const changeData = _.clone(data);
+            changeData.status = status;
+            if (response.data.status === 'Happening') {
+              steps[1] = {
+                title: 'Accepted',
+                icon: 'check-circle'
+              };
+              this.setState({ current: 2 });
+            }
+            if (response.data.status === 'Canceled') {
+              steps[1] = {
+                title: 'Canceled',
+                icon: 'close-circle'
+              };
+              this.setState({ current: 1 });
+            }
+            if (response.data.status === 'Completed') {
+              steps[1] = {
+                title: 'Requesting',
+                icon: 'loading'
+              };
+              this.setState({ current: 3 });
+            }
+            this.setState({ data: changeData });
+          }
+        })
+        .catch(err => {
+          this.setState({ submitting: false });
+          if (err.response) {
+            message.error(err.response.data.error);
+          } else {
+            message.error(err.message);
+          }
+        });
+    }
+  };
+
   render() {
-    const { current, data, submitting, review, rating, isLoading } = this.state;
+    const {
+      user,
+      match: { params }
+    } = this.props;
+    const {
+      current,
+      data,
+      submitting,
+      review,
+      rating,
+      isLoading,
+      confirming
+    } = this.state;
     const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
     let status = 'default';
     switch (data.status) {
@@ -188,7 +284,47 @@ class ContractDetail extends Component {
         status = 'default';
     }
     let detailForm;
-    if (data.status === 'Completed') {
+    let confirmForm;
+    if (user.role !== 'student' && data.status === 'Requesting') {
+      confirmForm = (
+        <Descriptions.Item label="Confirm" span={2}>
+          <ButtonGroup>
+            <Popconfirm
+              title="Are you sure accept this contract?"
+              onConfirm={() => this.handleConfirm('Happening')}
+            >
+              <Button type="primary" loading={confirming}>
+                Accept
+              </Button>
+            </Popconfirm>
+            <Popconfirm
+              title="Are you sure cancel this contract?"
+              onConfirm={() => this.handleConfirm('Canceled')}
+            >
+              <Button type="danger" loading={confirming}>
+                Cancel
+              </Button>
+            </Popconfirm>
+          </ButtonGroup>
+        </Descriptions.Item>
+      );
+    } else if (user.role === 'student' && data.status === 'Happening') {
+      confirmForm = (
+        <Descriptions.Item label="Confirm" span={2}>
+          <Popconfirm
+            title="Are you sure complete this contract?"
+            onConfirm={() => this.handleConfirm('Completed')}
+          >
+            <Button type="primary" loading={confirming}>
+              Make Completed
+            </Button>
+          </Popconfirm>
+        </Descriptions.Item>
+      );
+    } else {
+      confirmForm = null;
+    }
+    if (data && data.status === 'Completed') {
       detailForm = (
         <Descriptions title="Contract Info" bordered>
           <Descriptions.Item label="Id">{data._id}</Descriptions.Item>
@@ -223,7 +359,10 @@ class ContractDetail extends Component {
             <Statistic value={data.contractAmount} />
           </Descriptions.Item>
           <Descriptions.Item label="Description" span={3}>
-            {data.description}
+            {data.description &&
+              data.description
+                .split('\n')
+                .map(desc => <Paragraph>{desc}</Paragraph>)}
           </Descriptions.Item>
           <Descriptions.Item label="Rating" span={3}>
             <Rate
@@ -284,9 +423,18 @@ class ContractDetail extends Component {
           <Descriptions.Item label="Updated at" span={2}>
             {moment(data.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
           </Descriptions.Item>
-          <Descriptions.Item label="Status" span={3}>
+          <Descriptions.Item
+            label="Status"
+            span={
+              (user.role !== 'student' && data.status === 'Requesting') ||
+              (user.role === 'student' && data.status === 'Happening')
+                ? 1
+                : 3
+            }
+          >
             <Badge status={status} text={data.status} />
           </Descriptions.Item>
+          {confirmForm}
           <Descriptions.Item label="Rent hours">
             {data.rentHours}
           </Descriptions.Item>
@@ -294,9 +442,19 @@ class ContractDetail extends Component {
             <Statistic value={data.contractAmount} />
           </Descriptions.Item>
           <Descriptions.Item label="Description" span={3}>
-            {data.description}
+            {data.description &&
+              data.description
+                .split('\n')
+                .map(desc => <Paragraph>{desc}</Paragraph>)}
           </Descriptions.Item>
         </Descriptions>
+      );
+    }
+    if (params.id === 'create') {
+      detailForm = (
+        <Row type="flex" justify="space-around">
+          <ContractForm />
+        </Row>
       );
     }
     return (

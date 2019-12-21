@@ -5,6 +5,7 @@ import './Dashboard.css';
 import Contract from '../Contract/Contract';
 import Complaint from '../Complaint/Complaint';
 import ContractDetail from '../ContractDetail/ContractDetail';
+import DashboardDetail from '../DashboardDetail/DashboardDetail';
 
 const { Sider, Content } = Layout;
 export default class Dashboard extends PureComponent {
@@ -18,6 +19,7 @@ export default class Dashboard extends PureComponent {
             mode="inline"
             defaultSelectedKeys={['dashboard']}
             selectedKeys={[location.pathname]}
+            style={{ height: '100vh' }}
           >
             <Menu.Item key={`${url}`}>
               <Link to={`${url}`}>
@@ -40,6 +42,7 @@ export default class Dashboard extends PureComponent {
           </Menu>
         </Sider>
         <Content className="dashboardContent">
+          <Route path={`${path}`} exact component={DashboardDetail} />
           <Route path={`${path}/contract`} exact component={Contract} />
           <Route
             path={`${path}/contract/:id`}
