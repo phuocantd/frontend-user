@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Tag, Statistic, Table } from 'antd';
+import { Layout, Tag, Statistic, Table, message } from 'antd';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import services from '../../api/services';
@@ -22,6 +22,9 @@ const columns = [
       }
       if (tag === 'Canceled') {
         color = 'volcano';
+      }
+      if (tag === 'Happening') {
+        color = 'gold';
       }
       return (
         <span>
@@ -62,11 +65,75 @@ const columns = [
   {
     title: 'Action',
     key: 'action',
-    render: () => (
-      <span>
-        <Link to="/dashboard/complaint/create">Complaint</Link>
-      </span>
-    )
+    render: (text, record) =>
+      record.status !== 'Requesting' && record.status !== 'Canceled' ? (
+        <span>
+          <Link
+            to={`/dashboard/complaint/create/${record._id}`}
+            onClick={e => e.stopPropagation()}
+          >
+            Complaint
+          </Link>
+        </span>
+      ) : null
+  }
+];
+const columnsTutor = [
+  {
+    title: 'Title',
+    dataIndex: 'title',
+    key: 'title'
+  },
+  {
+    title: 'Status',
+    dataIndex: 'status',
+    key: 'status',
+    render: tag => {
+      let color = 'geekblue';
+      if (tag === 'Completed') {
+        color = 'green';
+      }
+      if (tag === 'Canceled') {
+        color = 'volcano';
+      }
+      if (tag === 'Happening') {
+        color = 'gold';
+      }
+      return (
+        <span>
+          <Tag color={color} key={tag}>
+            {tag.toUpperCase()}
+          </Tag>
+        </span>
+      );
+    }
+  },
+  {
+    title: 'Description',
+    dataIndex: 'description',
+    key: 'description',
+    ellipsis: true
+  },
+  {
+    title: 'Tutor',
+    dataIndex: 'tutor.userInfo.name',
+    key: 'tutor'
+  },
+  {
+    title: 'Student',
+    dataIndex: 'student.userInfo.name',
+    key: 'student'
+  },
+  {
+    title: 'Rent Hours',
+    dataIndex: 'rentHours',
+    key: 'rentHours'
+  },
+  {
+    title: 'Contract Amount',
+    dataIndex: 'contractAmount',
+    key: 'contractAmount',
+    render: amount => <Statistic value={amount} />
   }
 ];
 class Contract extends Component {
@@ -87,21 +154,34 @@ class Contract extends Component {
         this.setState({ isLoading: false });
         if (response.success) {
           this.setState({ contracts: response.data.results });
+        } else {
+          message.error(response.error);
         }
       })
-      .catch(() => {
+      .catch(err => {
         this.setState({ isLoading: false });
+        if (err.response) {
+          message.error(err.response.data.error);
+        } else {
+          message.error(err.message);
+        }
       });
   }
 
   render() {
-    const { history, match } = this.props;
+    const { history, match, role } = this.props;
     const { path } = match;
     const { contracts, isLoading } = this.state;
+    let currentColumn;
+    if (role !== 'student') {
+      currentColumn = columnsTutor;
+    } else {
+      currentColumn = columns;
+    }
     return (
       <Layout className="contractLayout">
         <Table
-          columns={columns}
+          columns={currentColumn}
           dataSource={contracts}
           rowKey="_id"
           className="contractTable"
@@ -110,7 +190,7 @@ class Contract extends Component {
             return {
               onClick: () => {
                 history.push(`${path}/${record._id}`);
-              } // click row
+              }
             };
           }}
         />
@@ -121,7 +201,8 @@ class Contract extends Component {
 
 const mapStateToProps = state => {
   return {
-    token: state.user.token
+    token: state.user.token,
+    role: state.user.user.role
   };
 };
 

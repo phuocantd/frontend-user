@@ -3,18 +3,23 @@ import {
   UPDATE_TAGS,
   UPDATE_SPECIALIZATIONS,
   REQUESTING,
-  REQUESTED
+  REQUESTED,
+  UPDATE_PAGINATION
 } from '../actions/types';
 
 const initialState = {
   tutors: [],
   tags: [],
   specializations: [],
-  isRequest: false
+  isRequest: false,
+  pagination: {}
 };
 
 const tutorReducer = (state = initialState, action) => {
   switch (action.type) {
+    case UPDATE_PAGINATION: {
+      return { ...state, pagination: action.payload };
+    }
     case UPDATE_TUTORS: {
       return { ...state, tutors: action.payload };
     }

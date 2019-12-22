@@ -69,7 +69,9 @@ class Complaint extends Component {
   }
 
   render() {
+    const { history, match } = this.props;
     const { complaints, isLoading } = this.state;
+    const { path } = match;
     return (
       <Layout className="complaintLayout">
         <Table
@@ -78,6 +80,13 @@ class Complaint extends Component {
           rowKey="_id"
           className="complaintTable"
           loading={isLoading}
+          onRow={record => {
+            return {
+              onClick: () => {
+                history.push(`${path}/${record._id}`);
+              }
+            };
+          }}
         />
       </Layout>
     );

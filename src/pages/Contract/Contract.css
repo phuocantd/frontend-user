@@ -1,5 +1,6 @@
 .contractTable {
   background-color: #ffffff;
+  cursor: pointer;
 }
 .contractLayout {
   padding: 0 15px;

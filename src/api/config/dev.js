@@ -6,7 +6,8 @@ export default {
   login_facebook: () => `${DOMAIN}/auth/facebook`,
   login_google: () => `${DOMAIN}/auth/google`,
   get_upload_avatar_url: () => `${DOMAIN}/users/upload`,
-  update_user: id => `${DOMAIN}/users/${id}`,
+  update_user: () => `${DOMAIN}/users`,
+  update_password: () => `${DOMAIN}/users/newpw`,
   get_user: () => `${DOMAIN}/auth/me`,
   tutors: () => `${DOMAIN}/tutors`,
   detail_tutor: id => `${DOMAIN}/tutors/${id}`,
@@ -16,5 +17,5 @@ export default {
   detail_contract: id => `${DOMAIN}/contracts/${id}`,
   complaints: () => `${DOMAIN}/complaints`,
   complaint_detail: id => `${DOMAIN}/complaints/${id}`,
-  statistics: () => `${DOMAIN}/statisctics/contracts`
+  statistics: () => `${DOMAIN}/statistics/contracts`
 };

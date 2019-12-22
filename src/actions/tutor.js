@@ -3,13 +3,21 @@ import {
   UPDATE_TAGS,
   UPDATE_SPECIALIZATIONS,
   REQUESTING,
-  REQUESTED
+  REQUESTED,
+  UPDATE_PAGINATION
 } from './types';
 import services from '../api/services';
 
 const updateTutors = item => {
   return {
     type: UPDATE_TUTORS,
+    payload: item
+  };
+};
+
+const updatePagination = item => {
+  return {
+    type: UPDATE_PAGINATION,
     payload: item
   };
 };
@@ -51,6 +59,40 @@ export const getTutorsNoCondition = item => {
         dispatch(endRequest());
         if (response.success) {
           dispatch(updateTutors(response.data.results));
+          dispatch(
+            updatePagination({
+              ...response.data.pagination,
+              count: response.data.count
+            })
+          );
+        }
+      })
+      .catch(err => {
+        dispatch(endRequest());
+        if (err.response) {
+          item.message.error(err.response.data.error);
+        } else {
+          item.message.error(err.message);
+        }
+      });
+  };
+};
+export const getTutorsCondition = item => {
+  const { address, tag, specialization, paymentPerHour, page } = item;
+  return async dispatch => {
+    dispatch(startRequest());
+    await services.tutor
+      .getTutorCondition(address, paymentPerHour, specialization, tag, page)
+      .then(response => {
+        dispatch(endRequest());
+        if (response.success) {
+          dispatch(updateTutors(response.data.results));
+          dispatch(
+            updatePagination({
+              ...response.data.pagination,
+              count: response.data.count
+            })
+          );
         }
       })
       .catch(err => {
