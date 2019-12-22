@@ -8,19 +8,31 @@ import {
   Divider,
   Tag,
   Typography,
-  Rate
+  Rate,
+  List
 } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import Meta from 'antd/lib/card/Meta';
 
 const { Paragraph, Title } = Typography;
-export default class ModalInfo extends PureComponent {
+class ModalInfo extends PureComponent {
+  handleHire = () => {
+    const { history, data } = this.props;
+    history.push(`/dashboard/contract/create/${data._id}`);
+  };
+
   render() {
     const { visible, handleCancel, data } = this.props;
-    const { userInfo } = data;
+    const { userInfo, histories } = data;
     return (
-      <Modal visible={visible} closable footer={null} onCancel={handleCancel}>
+      <Modal
+        visible={visible}
+        closable
+        onCancel={handleCancel}
+        okText="Hire"
+        onOk={() => this.handleHire()}
+      >
         <Meta
           avatar={<Avatar size={64} src={userInfo.avatar} />}
           title={<Link to="/profile">{userInfo.name}</Link>}
@@ -49,7 +61,40 @@ export default class ModalInfo extends PureComponent {
         </Row>
         <Title level={4}>Work history & feedback</Title>
         <Rate allowHalf defaultValue={data.averageRating} disabled />
+        {histories ? (
+          <List
+            itemLayout="vertical"
+            style={{ height: 200, overflow: 'scroll' }}
+            dataSource={histories.filter(item => {
+              return (
+                item.status === 'Completed' &&
+                item.review &&
+                typeof item.rating !== 'undefined'
+              );
+            })}
+            renderItem={item => (
+              <List.Item>
+                <List.Item.Meta
+                  avatar={<Avatar src={item.student.userInfo.avatar} />}
+                  title={
+                    <div>
+                      {item.student.userInfo.name}
+                      <Rate
+                        value={item.rating}
+                        disabled
+                        style={{ float: 'right', marginRight: 10 }}
+                      />
+                    </div>
+                  }
+                  description={item.review}
+                />
+              </List.Item>
+            )}
+          />
+        ) : null}
       </Modal>
     );
   }
 }
+
+export default withRouter(ModalInfo);

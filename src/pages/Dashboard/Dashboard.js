@@ -6,6 +6,9 @@ import Contract from '../Contract/Contract';
 import Complaint from '../Complaint/Complaint';
 import ContractDetail from '../ContractDetail/ContractDetail';
 import DashboardDetail from '../DashboardDetail/DashboardDetail';
+import ContractCreate from '../ContractCreate/ContractCreate';
+import ComplaintDetail from '../ComplaintDetail/ComplaintDetail';
+import ComplaintCreate from '../ComplaintCreate/ComplaintCreate';
 
 const { Sider, Content } = Layout;
 export default class Dashboard extends PureComponent {
@@ -49,7 +52,22 @@ export default class Dashboard extends PureComponent {
             exact
             component={ContractDetail}
           />
+          <Route
+            path={`${path}/contract/create/:id`}
+            exact
+            component={ContractCreate}
+          />
           <Route path={`${path}/complaint`} exact component={Complaint} />
+          <Route
+            path={`${path}/complaint/:id`}
+            exact
+            component={ComplaintDetail}
+          />
+          <Route
+            path={`${path}/complaint/create/:id`}
+            exact
+            component={ComplaintCreate}
+          />
         </Content>
       </Layout>
     );

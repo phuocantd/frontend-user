@@ -9,11 +9,13 @@ import {
   List,
   DatePicker,
   Select,
-  TimePicker
+  TimePicker,
+  Skeleton
 } from 'antd';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import _ from 'lodash';
 import './ContractForm.css';
 import services from '../../api/services';
 
@@ -28,32 +30,39 @@ class ContractForm extends Component {
       rentHours: 0,
       weeks: 0,
       dayRate: 0,
-      fromTime: moment(),
-      toTime: moment(),
+      fromTime: {},
+      toTime: {},
       dayStart: '',
       dayEnd: '',
       schedule: '',
       timeStart: '',
       timeEnd: '',
-      tutor: {}
+      tutor: {},
+      isLoading: false
     };
   }
 
   componentDidMount() {
-    const { id } = this.props;
+    const { id, history } = this.props;
+    this.setState({ isLoading: true });
     services.tutor
-      .getTutor(id || '5df2861582f8061a082bbfc7')
+      .getTutor(id)
       .then(response => {
+        this.setState({ isLoading: false });
         if (response.success) {
           this.setState({ tutor: response.data });
+        } else {
+          history.push(`/dashboard/contract`);
         }
       })
       .catch(err => {
+        this.setState({ isLoading: false });
         if (err.response) {
           message.error(err.response.data.error);
         } else {
           message.error(err.message);
         }
+        history.push(`/dashboard/contract`);
       });
   }
 
@@ -80,16 +89,21 @@ class ContractForm extends Component {
           Time: ${timeStart} - ${timeEnd}\n
           ${values.description}`
         };
+        this.setState({ submmiting: true });
         services.contract
           .createContract(token, data)
           .then(response => {
+            this.setState({ submmiting: false });
             if (response.success) {
+              message.success('Create contract successfully');
+              message.info('Waiting for response from tutor');
               history.push(`/dashboard/contract`);
             } else {
               message.error(response.error);
             }
           })
           .catch(error => {
+            this.setState({ submmiting: false });
             if (error.response) {
               message.error(error.response.data.error);
             } else {
@@ -141,14 +155,51 @@ class ContractForm extends Component {
 
   calculateRentHours = () => {
     const { fromTime, toTime, weeks, dayRate } = this.state;
-    const duration = moment.duration(toTime.diff(fromTime));
-    const numHour = Math.round(duration.asHours());
-    this.setState({ rentHours: weeks * dayRate * numHour });
+    if (!_.isEmpty(fromTime) && !_.isEmpty(toTime)) {
+      const duration = moment.duration(toTime.diff(fromTime));
+      const numHour = Math.round(duration.asHours());
+      this.setState({ rentHours: weeks * dayRate * numHour });
+    }
+  };
+
+  disabledDate = current => {
+    // Can not select days before today and today
+    return current && current < moment().endOf('day');
+  };
+
+  validateTimeInterval = (rule, value, callback) => {
+    const duration = moment.duration(value[1].diff(value[0]));
+    const numweek = Math.round(duration.asWeeks());
+    if (value && numweek < 1) {
+      callback('Time interval must be greater than or equal one week');
+    } else {
+      callback();
+    }
+  };
+
+  validateFromTime = (rule, value, callback) => {
+    const { form } = this.props;
+    const toTime = form.getFieldValue('toTime');
+    if (toTime && value.isAfter(toTime)) {
+      callback('Time start must before time end');
+    } else {
+      callback();
+    }
+  };
+
+  validateToTime = (rule, value, callback) => {
+    const { form } = this.props;
+    const fromTime = form.getFieldValue('fromTime');
+    if (fromTime && value.isBefore(fromTime)) {
+      callback('Time end must after time start');
+    } else {
+      callback();
+    }
   };
 
   render() {
     const { form } = this.props;
-    const { submmiting, tutor, rentHours } = this.state;
+    const { submmiting, tutor, rentHours, isLoading } = this.state;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -172,13 +223,11 @@ class ContractForm extends Component {
         }
       }
     };
-    const config = {
-      rules: [
-        { type: 'object', required: true, message: 'Please select time!' }
-      ]
-    };
     const rangeConfig = {
-      rules: [{ type: 'array', required: true, message: 'Please select time!' }]
+      rules: [
+        { type: 'array', required: true, message: 'Please select time!' },
+        { validator: this.validateTimeInterval }
+      ]
     };
     return (
       <Form
@@ -199,19 +248,24 @@ class ContractForm extends Component {
         </Form.Item>
         <Form.Item label="Tutor">
           <List.Item key={tutor._id}>
-            <List.Item.Meta
-              avatar={
-                <Avatar src={(tutor.userInfo && tutor.userInfo.avatar) || ''} />
-              }
-              title={(tutor.userInfo && tutor.userInfo.name) || 'Unknown'}
-              description={
-                (tutor.specialization && tutor.specialization.name) || 'Unknown'
-              }
-            />
-            <Statistic value={tutor.paymentPerHour} suffix="/hr" />
+            <Skeleton avatar title={false} loading={isLoading} active>
+              <List.Item.Meta
+                avatar={
+                  <Avatar
+                    src={(tutor.userInfo && tutor.userInfo.avatar) || ''}
+                  />
+                }
+                title={(tutor.userInfo && tutor.userInfo.name) || 'Unknown'}
+                description={
+                  (tutor.specialization && tutor.specialization.name) ||
+                  'Unknown'
+                }
+              />
+              <Statistic value={tutor.paymentPerHour} suffix="/hr" />
+            </Skeleton>
           </List.Item>
         </Form.Item>
-        <Form.Item label="Time Interval">
+        <Form.Item label="Time Interval" hasFeedback>
           {getFieldDecorator(
             'timeInterval',
             rangeConfig
@@ -220,10 +274,11 @@ class ContractForm extends Component {
               onChange={(dates, text) =>
                 this.handleChangeTimeInterval(dates, text)
               }
+              disabledDate={current => this.disabledDate(current)}
             />
           )}
         </Form.Item>
-        <Form.Item label="Schedule">
+        <Form.Item label="Schedule" hasFeedback>
           {getFieldDecorator('schedule', {
             rules: [{ required: true, message: 'Please select your schedule!' }]
           })(
@@ -245,23 +300,37 @@ class ContractForm extends Component {
             </Select>
           )}
         </Form.Item>
-        <Form.Item label="From time">
-          {getFieldDecorator(
-            'fromTime',
-            config
-          )(
+        <Form.Item label="From time" hasFeedback>
+          {getFieldDecorator('fromTime', {
+            rules: [
+              {
+                type: 'object',
+                required: true,
+                message: 'Please select time!'
+              },
+              { validator: this.validateFromTime }
+            ]
+          })(
             <TimePicker
               onChange={(times, text) => this.handleChangeFromTime(times, text)}
+              format="HH:mm"
             />
           )}
         </Form.Item>
-        <Form.Item label="To time">
-          {getFieldDecorator(
-            'toTime',
-            config
-          )(
+        <Form.Item label="To time" hasFeedback>
+          {getFieldDecorator('toTime', {
+            rules: [
+              {
+                type: 'object',
+                required: true,
+                message: 'Please select time!'
+              },
+              { validator: this.validateToTime }
+            ]
+          })(
             <TimePicker
               onChange={(times, text) => this.handleChangeToTime(times, text)}
+              format="HH:mm"
             />
           )}
         </Form.Item>
@@ -278,22 +347,9 @@ class ContractForm extends Component {
         <Form.Item label="Total Amount" hasFeedback>
           <Statistic value={rentHours * tutor.paymentPerHour} />
         </Form.Item>
-        <Form.Item label="Password" hasFeedback>
-          {getFieldDecorator('password', {
-            rules: [
-              {
-                required: true,
-                message: 'Please input your password!'
-              },
-              {
-                validator: this.validateToNextPassword
-              }
-            ]
-          })(<Input.Password />)}
-        </Form.Item>
         <Form.Item wrapperCol={tailFormItemLayout.wrapperCol}>
           <Button type="primary" htmlType="submit" loading={submmiting}>
-            Create Contract
+            Checkout
           </Button>
         </Form.Item>
       </Form>

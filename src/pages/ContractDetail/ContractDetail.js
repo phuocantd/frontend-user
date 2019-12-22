@@ -15,7 +15,6 @@ import {
   Spin,
   Input,
   Popconfirm,
-  Row,
   Typography
 } from 'antd';
 import _ from 'lodash';
@@ -23,7 +22,6 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import services from '../../api/services';
 import './ContractDetail.css';
-import ContractForm from '../../components/ContractForm/ContractForm';
 
 const { TextArea } = Input;
 const { Step } = Steps;
@@ -84,21 +82,7 @@ class ContractDetail extends Component {
     const {
       match: { params }
     } = this.props;
-    if (params.id === 'create') {
-      steps[1] = {
-        title: 'Requesting',
-        icon: 'loading-3-quarters'
-      };
-      this.setState({ current: 0 });
-    } else if (params.id === 'checkout') {
-      steps[1] = {
-        title: 'Requesting',
-        icon: 'loading-3-quarters'
-      };
-      this.setState({ current: 1 });
-    } else {
-      this.fetchDetailContract(params.id);
-    }
+    this.fetchDetailContract(params.id);
   }
 
   fetchDetailContract = id => {
@@ -254,10 +238,7 @@ class ContractDetail extends Component {
   };
 
   render() {
-    const {
-      user,
-      match: { params }
-    } = this.props;
+    const { user } = this.props;
     const {
       current,
       data,
@@ -285,18 +266,20 @@ class ContractDetail extends Component {
     }
     let detailForm;
     let confirmForm;
-    if (user.role !== 'student' && data.status === 'Requesting') {
+    if (data.status === 'Requesting') {
       confirmForm = (
         <Descriptions.Item label="Confirm" span={2}>
           <ButtonGroup>
-            <Popconfirm
-              title="Are you sure accept this contract?"
-              onConfirm={() => this.handleConfirm('Happening')}
-            >
-              <Button type="primary" loading={confirming}>
-                Accept
-              </Button>
-            </Popconfirm>
+            {user.role !== 'student' ? (
+              <Popconfirm
+                title="Are you sure accept this contract?"
+                onConfirm={() => this.handleConfirm('Happening')}
+              >
+                <Button type="primary" loading={confirming}>
+                  Accept
+                </Button>
+              </Popconfirm>
+            ) : null}
             <Popconfirm
               title="Are you sure cancel this contract?"
               onConfirm={() => this.handleConfirm('Canceled')}
@@ -426,7 +409,7 @@ class ContractDetail extends Component {
           <Descriptions.Item
             label="Status"
             span={
-              (user.role !== 'student' && data.status === 'Requesting') ||
+              data.status === 'Requesting' ||
               (user.role === 'student' && data.status === 'Happening')
                 ? 1
                 : 3
@@ -448,13 +431,6 @@ class ContractDetail extends Component {
                 .map(desc => <Paragraph>{desc}</Paragraph>)}
           </Descriptions.Item>
         </Descriptions>
-      );
-    }
-    if (params.id === 'create') {
-      detailForm = (
-        <Row type="flex" justify="space-around">
-          <ContractForm />
-        </Row>
       );
     }
     return (

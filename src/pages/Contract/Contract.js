@@ -69,7 +69,7 @@ const columns = [
       record.status !== 'Requesting' && record.status !== 'Canceled' ? (
         <span>
           <Link
-            to="/dashboard/complaint/create"
+            to={`/dashboard/complaint/create/${record._id}`}
             onClick={e => e.stopPropagation()}
           >
             Complaint
