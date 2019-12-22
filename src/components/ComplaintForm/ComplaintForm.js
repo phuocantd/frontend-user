@@ -10,7 +10,7 @@ class ComplaintForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      submmiting: false
+      submiting: false
     };
   }
 
@@ -19,11 +19,11 @@ class ComplaintForm extends Component {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.setState({ submmiting: true });
+        this.setState({ submiting: true });
         services.complaint
           .createComplaint(token, values)
           .then(response => {
-            this.setState({ submmiting: false });
+            this.setState({ submiting: false });
             if (response.success) {
               message.success('Create complaint successfully');
               message.info('Waiting for response from admin');
@@ -33,7 +33,7 @@ class ComplaintForm extends Component {
             }
           })
           .catch(error => {
-            this.setState({ submmiting: false });
+            this.setState({ submiting: false });
             if (error.response) {
               message.error(error.response.data.error);
             } else {
@@ -49,7 +49,7 @@ class ComplaintForm extends Component {
       form,
       match: { params }
     } = this.props;
-    const { submmiting } = this.state;
+    const { submiting } = this.state;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -112,7 +112,7 @@ class ComplaintForm extends Component {
           })(<TextArea rows={4} />)}
         </Form.Item>
         <Form.Item wrapperCol={tailFormItemLayout.wrapperCol}>
-          <Button type="primary" htmlType="submit" loading={submmiting}>
+          <Button type="primary" htmlType="submit" loading={submiting}>
             Send to admin
           </Button>
         </Form.Item>

@@ -10,7 +10,10 @@ import {
   Col,
   Upload
 } from 'antd';
+import { connect } from 'react-redux';
 import config from '../../api/config';
+import services from '../../api/services';
+import { updateUser } from '../../actions/user';
 
 class InfoForm extends Component {
   constructor(props) {
@@ -21,9 +24,32 @@ class InfoForm extends Component {
   }
 
   handleSubmit = e => {
-    // const { form } = this.props;
+    const { form, token, updateUserInfo } = this.props;
     e.preventDefault();
-    // form.validateFieldsAndScroll((err, values) => {});
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        this.setState({ isLoading: true });
+        services.user
+          .updateUser(values.name, values.address, values.password, token)
+          .then(response => {
+            this.setState({ isLoading: false });
+            if (response.success) {
+              message.success('Infomation changed successfully');
+              updateUserInfo(response.data);
+            } else {
+              message.error(response.error);
+            }
+          })
+          .catch(error => {
+            this.setState({ isLoading: false });
+            if (error.response) {
+              message.error(error.response.data.error);
+            } else {
+              message.error(error.message);
+            }
+          });
+      }
+    });
   };
 
   beforeUpload = file => {
@@ -176,7 +202,7 @@ class InfoForm extends Component {
                 })(<Input />)}
               </Form.Item>
               <Form.Item label="Password" hasFeedback>
-                {getFieldDecorator('Password', {
+                {getFieldDecorator('password', {
                   rules: [
                     {
                       required: true,
@@ -198,4 +224,15 @@ class InfoForm extends Component {
   }
 }
 
-export default Form.create({ name: 'info_form' })(InfoForm);
+const mapDispatchtoProps = dispatch => {
+  return {
+    updateUserInfo: item => {
+      dispatch(updateUser(item));
+    }
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchtoProps
+)(Form.create({ name: 'info_form' })(InfoForm));

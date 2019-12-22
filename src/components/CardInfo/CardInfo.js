@@ -62,7 +62,8 @@ export default class CardInfo extends Component {
               <Statistic value={data.paymentPerHour} suffix="/hr" />
             </Col>
             <Col span={12}>
-              {(userInfo.address && userInfo.address.split(', ').pop()) ||
+              {(userInfo.address &&
+                (userInfo.address.split(', ').pop() || userInfo.address)) ||
                 'Unknown'}
             </Col>
           </Row>
