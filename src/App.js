@@ -10,8 +10,8 @@ import User from './pages/User/User';
 import Empty from './layouts/Empty/Empty';
 import RouteWithLayout from './routes/RouteWithLayout';
 import Dashboard from './pages/Dashboard/Dashboard';
-import NotFound from './pages/Error/NotFound';
-import NotAuth from './pages/Error/NotAuth';
+// import NotFound from './pages/Error/NotFound';
+// import NotAuth from './pages/Error/NotAuth';
 
 function App() {
   return (
@@ -27,8 +27,8 @@ function App() {
         <RouteWithLayout layout={Main} path="/user" component={User} authed />
         <RouteWithLayout layout={Empty} path="/login" component={Login} />
         <RouteWithLayout layout={Empty} path="/register" component={Register} />
-        <RouteWithLayout layout={Empty} path="/403" component={NotAuth} />
-        <RouteWithLayout layout={Empty} component={NotFound} />
+        {/* <RouteWithLayout layout={Empty} path="/403" component={NotAuth} /> */}
+        {/* <RouteWithLayout layout={Empty} component={NotFound} /> */}
       </Switch>
     </Layout>
   );
