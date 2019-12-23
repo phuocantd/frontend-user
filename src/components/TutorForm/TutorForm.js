@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Layout, Row, Input, Select, Col, message, Pagination } from 'antd';
 import { connect } from 'react-redux';
+import Parser from 'html-react-parser';
 import _ from 'lodash';
 import CardInfo from '../CardInfo/CardInfo';
 import './TutorForm.css';
@@ -111,6 +112,10 @@ class TutorForm extends Component {
     if (isRequest) {
       dataTutor = Array.from(Array(8), () => sample);
     }
+    for (let i = 0; i < dataTutor.length; i += 1) {
+      dataTutor[i].selfIntro = Parser(`${dataTutor[i].selfIntro}`);
+    }
+
     return (
       <Layout className="tutorFormLayout">
         <Row gutter={[16, 16]} style={{ margin: '10px 0' }}>
