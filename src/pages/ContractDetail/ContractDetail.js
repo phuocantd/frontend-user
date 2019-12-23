@@ -100,6 +100,17 @@ class ContractDetail extends Component {
             };
             this.setState({ current: 2 });
           }
+          if (response.data.status === 'Complaining') {
+            steps[1] = {
+              title: 'Accepted',
+              icon: 'check-circle'
+            };
+            steps[2] = {
+              title: 'Complaining',
+              icon: 'exclamation-circle'
+            };
+            this.setState({ current: 2 });
+          }
           if (response.data.status === 'Requesting') {
             steps[1] = {
               title: 'Requesting',
@@ -118,6 +129,10 @@ class ContractDetail extends Component {
             steps[1] = {
               title: 'Requesting',
               icon: 'loading'
+            };
+            steps[2] = {
+              title: 'Happening',
+              icon: 'schedule'
             };
             this.setState({ current: 3 });
           }
@@ -220,6 +235,10 @@ class ContractDetail extends Component {
               steps[1] = {
                 title: 'Requesting',
                 icon: 'loading'
+              };
+              steps[2] = {
+                title: 'Happening',
+                icon: 'schedule'
               };
               this.setState({ current: 3 });
             }

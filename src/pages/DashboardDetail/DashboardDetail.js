@@ -17,7 +17,13 @@ const cols = {
   },
   _id: { alias: 'Contracts' }
 };
-const typeContracts = ['Requesting', 'Canceled', 'Happening', 'Completed'];
+const typeContracts = [
+  'Requesting',
+  'Canceled',
+  'Happening',
+  'Completed',
+  'Complaining'
+];
 class DashboardDetail extends Component {
   constructor(props) {
     super(props);
@@ -73,6 +79,8 @@ class DashboardDetail extends Component {
         return 'bg-success';
       case 'Requesting':
         return 'bg-info';
+      case 'Complaining':
+        return 'bg-gradient';
       default:
         return '';
     }
@@ -86,8 +94,12 @@ class DashboardDetail extends Component {
         return 'close-circle';
       case 'Completed':
         return 'smile-o';
-      default:
+      case 'Requesting':
         return 'loading';
+      case 'Complaining':
+        return 'exclamation-circle';
+      default:
+        return 'question-circle';
     }
   };
 
@@ -107,7 +119,7 @@ class DashboardDetail extends Component {
         {role !== 'student' ? (
           <Row gutter={[16, 16]}>
             {dataContract.map(contract => (
-              <Col span={6} key={_.uniqueId('row_')}>
+              <Col span={4} key={_.uniqueId('row_')}>
                 <Link to="/dashboard/contract">
                   <Card
                     loading={isRequest}

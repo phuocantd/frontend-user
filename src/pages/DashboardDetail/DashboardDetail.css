@@ -22,6 +22,11 @@
   background: linear-gradient(45deg, #f9b115 0%, #f6960b 100%);
   border-color: #f6960b;
 }
+.bg-gradient {
+  background: #1f1498;
+  background: linear-gradient(45deg, #321fdb 0%, #1f1498 100%);
+  border-color: #1f1498;
+}
 .ant-statistic-title {
   color: rgba(255, 255, 255, 0.6) !important;
   font-weight: bold;
