@@ -3,7 +3,8 @@ import {
   REQUESTING,
   REQUESTED,
   LOGOUT,
-  UPDATE_USER
+  UPDATE_USER,
+  UPDATE_USER_INFO
 } from '../actions/types';
 
 const initialState = {
@@ -32,10 +33,16 @@ const userReducer = (state = initialState, action) => {
       };
     }
     case REQUESTING: {
-      return { ...state, isRequest: true };
+      return {
+        ...state,
+        isRequest: true
+      };
     }
     case REQUESTED: {
-      return { ...state, isRequest: false };
+      return {
+        ...state,
+        isRequest: false
+      };
     }
     case LOGOUT: {
       return {
@@ -46,7 +53,19 @@ const userReducer = (state = initialState, action) => {
       };
     }
     case UPDATE_USER: {
-      return { ...state, user: action.payload };
+      return {
+        ...state,
+        user: action.payload
+      };
+    }
+    case UPDATE_USER_INFO: {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          userInfo: action.payload
+        }
+      };
     }
     default:
       return state;

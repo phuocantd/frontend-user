@@ -1,4 +1,11 @@
-import { LOGIN, LOGOUT, REQUESTING, REQUESTED, UPDATE_USER } from './types';
+import {
+  LOGIN,
+  LOGOUT,
+  REQUESTING,
+  REQUESTED,
+  UPDATE_USER,
+  UPDATE_USER_INFO
+} from './types';
 import services from '../api/services';
 
 const login = item => {
@@ -32,6 +39,13 @@ export const logout = item => {
 export const updateUser = item => {
   return {
     type: UPDATE_USER,
+    payload: item
+  };
+};
+
+export const updateUserInfo = item => {
+  return {
+    type: UPDATE_USER_INFO,
     payload: item
   };
 };
@@ -132,7 +146,7 @@ export const handleGetUser = item => {
       .then(response => {
         dispatch(endRequest());
         if (response.success) {
-          dispatch(updateUser(response.data.userInfo || {}));
+          dispatch(updateUser(response.data || {}));
         } else {
           dispatch(logout());
         }

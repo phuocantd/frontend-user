@@ -20,7 +20,12 @@ class Main extends PureComponent {
     const { children, user } = this.props;
     let header = <PublicHeader />;
     if (!_.isEmpty(user)) {
-      header = <PrivateHeader avatar={user.avatar} name={user.name} />;
+      header = (
+        <PrivateHeader
+          avatar={user.userInfo.avatar}
+          name={user.userInfo.name}
+        />
+      );
     }
     return (
       <Layout className="mainLayout">

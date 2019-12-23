@@ -13,7 +13,7 @@ import {
 import { connect } from 'react-redux';
 import config from '../../api/config';
 import services from '../../api/services';
-import { updateUser } from '../../actions/user';
+import { updateUserInfo } from '../../actions/user';
 
 class InfoForm extends Component {
   constructor(props) {
@@ -24,7 +24,7 @@ class InfoForm extends Component {
   }
 
   handleSubmit = e => {
-    const { form, token, updateUserInfo } = this.props;
+    const { form, token, updateUserInf } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -35,7 +35,7 @@ class InfoForm extends Component {
             this.setState({ isLoading: false });
             if (response.success) {
               message.success('Infomation changed successfully');
-              updateUserInfo(response.data);
+              updateUserInf(response.data);
             } else {
               message.error(response.error);
             }
@@ -74,9 +74,9 @@ class InfoForm extends Component {
       this.setState({ isLoading: false });
       if (info.file.response) {
         const { response } = info.file;
-        const { updateUserInfo } = this.props;
+        const { updateUserInf } = this.props;
         if (response.error >= 0 && response.data.user) {
-          updateUserInfo(response.data.user);
+          updateUserInf(response.data.user);
           message.success('Avatar changed');
         } else {
           message.error(response.data.message);
@@ -135,8 +135,12 @@ class InfoForm extends Component {
               beforeUpload={this.beforeUpload}
               onChange={this.handleChange}
             >
-              {user.avatar ? (
-                <img src={user.avatar} alt="avatar" style={{ width: '100%' }} />
+              {user.userInfo.avatar ? (
+                <img
+                  src={user.userInfo.avatar}
+                  alt="avatar"
+                  style={{ width: '100%' }}
+                />
               ) : (
                 uploadButton
               )}
@@ -149,9 +153,7 @@ class InfoForm extends Component {
               labelCol={formItemLayout.labelCol}
               wrapperCol={formItemLayout.wrapperCol}
               onSubmit={this.handleSubmit}
-              style={{
-                width: '450px'
-              }}
+              style={{ width: '450px' }}
             >
               <Form.Item label="E-mail">
                 {getFieldDecorator('email', {
@@ -165,7 +167,7 @@ class InfoForm extends Component {
                       message: 'Please input your E-mail!'
                     }
                   ],
-                  initialValue: user.email
+                  initialValue: user.userInfo.email
                 })(<Input readOnly />)}
               </Form.Item>
               <Form.Item
@@ -186,7 +188,7 @@ class InfoForm extends Component {
                       whitespace: true
                     }
                   ],
-                  initialValue: user.name || ''
+                  initialValue: user.userInfo.name || ''
                 })(<Input />)}
               </Form.Item>
               <Form.Item label="Address">
@@ -198,7 +200,7 @@ class InfoForm extends Component {
                       whitespace: true
                     }
                   ],
-                  initialValue: user.address || ''
+                  initialValue: user.userInfo.address || ''
                 })(<Input />)}
               </Form.Item>
               <Form.Item label="Password" hasFeedback>
@@ -226,8 +228,8 @@ class InfoForm extends Component {
 
 const mapDispatchtoProps = dispatch => {
   return {
-    updateUserInfo: item => {
-      dispatch(updateUser(item));
+    updateUserInf: item => {
+      dispatch(updateUserInfo(item));
     }
   };
 };

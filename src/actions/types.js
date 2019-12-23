@@ -2,6 +2,7 @@ export const LOGIN = 'LOGIN';
 export const REQUESTING = 'REQUESTING';
 export const REQUESTED = 'REQUESTED';
 export const UPDATE_USER = 'UPDATE_USER';
+export const UPDATE_USER_INFO = 'UPDATE_USER_INFO';
 export const LOGOUT = 'LOGOUT';
 
 export const UPDATE_PAGINATION = 'UPDATE_PAGINATION';
