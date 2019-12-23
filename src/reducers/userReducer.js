@@ -3,12 +3,14 @@ import {
   REQUESTING,
   REQUESTED,
   LOGOUT,
-  UPDATE_USER
+  UPDATE_USER,
+  UPDATE_TUTOR_INFO
 } from '../actions/types';
 
 const initialState = {
   isLoggedIn: false,
   user: {},
+  tutorInfo: {},
   token: '',
   isRequest: false
 };
@@ -41,12 +43,16 @@ const userReducer = (state = initialState, action) => {
       return {
         isLoggedIn: false,
         user: {},
+        tutorInfo: {},
         token: '',
         isRequest: false
       };
     }
     case UPDATE_USER: {
       return { ...state, user: action.payload };
+    }
+    case UPDATE_TUTOR_INFO: {
+      return { ...state, tutorInfo: action.payload };
     }
     default:
       return state;
