@@ -153,11 +153,11 @@ export const handleGetUser = item => {
           ) {
             const tutorInfo = {
               tags: response.data.tags || [],
-              averageRating: response.data.averageRating || 0,
+              // averageRating: response.data.averageRating || 0,
               paymentPerHour: response.data.paymentPerHour || 0,
               selfIntro: response.data.selfIntro || '',
-              specialization: response.data.specialization || {},
-              successRate: response.data.successRate
+              specialization: response.data.specialization || {}
+              // successRate: response.data.successRate
             };
             dispatch(updateTutorInfo(tutorInfo));
           }

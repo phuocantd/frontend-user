@@ -14,6 +14,15 @@ export default {
       password
     });
   },
+  updateTutorInfo(paymentPerHour, specialization, tags, selfIntro, token) {
+    const url = config.url.tutors();
+    return api.putApiWithToken(url, token, {
+      paymentPerHour,
+      specialization,
+      tags,
+      selfIntro
+    });
+  },
   updatePassword(currentPassword, newPassword, token) {
     const url = config.url.update_password();
     return api.putApiWithToken(url, token, {
