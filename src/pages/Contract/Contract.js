@@ -66,7 +66,7 @@ const columns = [
     title: 'Action',
     key: 'action',
     render: (text, record) =>
-      record.status !== 'Requesting' && record.status !== 'Canceled' ? (
+      record.status === 'Happening' ? (
         <span>
           <Link
             to={`/dashboard/complaint/create/${record._id}`}

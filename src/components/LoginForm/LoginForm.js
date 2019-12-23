@@ -107,8 +107,9 @@ class LoginForm extends Component {
               </Button>
             )}
             onSuccess={resp => this.responseGoogle(resp)}
-            onFailure={resp => this.responseGoogle(resp)}
+            onFailure={() => {}}
             cookiePolicy="single_host_origin"
+            autoLoad={false}
           />
         </Form.Item>
       </Form>
