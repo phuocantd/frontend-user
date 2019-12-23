@@ -3,6 +3,7 @@ import { Form, Button, Input, Icon, message } from 'antd';
 import { connect } from 'react-redux';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import GoogleLogin from 'react-google-login';
+import { Link } from 'react-router-dom';
 import './LoginForm.css';
 import { handleAuthen } from '../../actions/user';
 
@@ -50,7 +51,13 @@ class LoginForm extends Component {
       >
         <Form.Item>
           {getFieldDecorator('email', {
-            rules: [{ required: true, message: 'Please input your email!' }]
+            rules: [
+              {
+                type: 'email',
+                message: 'The input is not valid E-mail!'
+              },
+              { required: true, message: 'Please input your email!' }
+            ]
           })(
             <Input
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -70,6 +77,9 @@ class LoginForm extends Component {
           )}
         </Form.Item>
         <Form.Item>
+          <Link className="login-form-forgot" to="/forgotPassword">
+            Forgot password
+          </Link>
           <Button
             type="default"
             htmlType="submit"

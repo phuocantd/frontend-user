@@ -20,5 +20,13 @@ export default {
       currentPassword,
       newPassword
     });
+  },
+  forgotPassword(email) {
+    const url = config.url.forgot_password();
+    return api.postApi(url, { email });
+  },
+  updateForgotPassword(newPassword, token) {
+    const url = config.url.update_forgot_password();
+    return api.putApi(url, { token, newPassword });
   }
 };

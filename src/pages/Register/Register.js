@@ -8,7 +8,7 @@ const { Content } = Layout;
 
 class Register extends PureComponent {
   render() {
-    const { isLoggedIn } = this.props;
+    const { isLoggedIn, history } = this.props;
     if (isLoggedIn) {
       return <Redirect to={{ pathname: '/' }} />;
     }
@@ -16,6 +16,7 @@ class Register extends PureComponent {
       <Layout>
         <PageHeader
           className="registerHeader"
+          onBack={() => history.push('/')}
           title="Sign Up"
           extra={[
             <h4 key="loginBtn" style={{ verticalAlign: 'middle' }}>
