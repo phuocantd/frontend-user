@@ -55,6 +55,17 @@ export default {
         return Promise.reject(error);
       });
   },
+  putApi(url, data = {}, request = {}) {
+    // request.withCredentials = true;
+    return axios
+      .put(url, data, request)
+      .then(response => {
+        return Promise.resolve(response.data);
+      })
+      .catch(error => {
+        return Promise.reject(error);
+      });
+  },
   putApiWithToken(url, token, data = {}, request = {}) {
     const additional = {
       ...request,

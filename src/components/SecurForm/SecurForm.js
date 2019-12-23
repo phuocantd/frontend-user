@@ -36,11 +36,31 @@ class SecurForm extends Component {
   };
 
   handleSubmit = e => {
-    const { form, token } = this.props;
+    const { form, token, forgot } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         this.setState({ submiting: true });
+        if (forgot && token) {
+          services.user
+            .updateForgotPassword(values.newPassword, token)
+            .then(response => {
+              this.setState({ submiting: false });
+              if (response.success) {
+                message.success('Password changed successfully');
+              } else {
+                message.error(response.error);
+              }
+            })
+            .catch(error => {
+              this.setState({ submiting: false });
+              if (error.response) {
+                message.error(error.response.data.error);
+              } else {
+                message.error(error.message);
+              }
+            });
+        }
         services.user
           .updatePassword(values.currentPassword, values.newPassword, token)
           .then(response => {
@@ -64,7 +84,7 @@ class SecurForm extends Component {
   };
 
   render() {
-    const { form } = this.props;
+    const { form, forgot } = this.props;
     const { submiting } = this.state;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -99,16 +119,18 @@ class SecurForm extends Component {
             width: '450px'
           }}
         >
-          <Form.Item label="Password" hasFeedback>
-            {getFieldDecorator('currentPassword', {
-              rules: [
-                {
-                  required: true,
-                  message: 'Please input your password!'
-                }
-              ]
-            })(<Input.Password />)}
-          </Form.Item>
+          {!forgot ? (
+            <Form.Item label="Password" hasFeedback>
+              {getFieldDecorator('currentPassword', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your password!'
+                  }
+                ]
+              })(<Input.Password />)}
+            </Form.Item>
+          ) : null}
           <Form.Item label="New Password" hasFeedback>
             {getFieldDecorator('newPassword', {
               rules: [
@@ -143,5 +165,9 @@ class SecurForm extends Component {
     );
   }
 }
+
+SecurForm.defaultProps = {
+  forgot: false
+};
 
 export default Form.create({ name: 'secur_form' })(SecurForm);

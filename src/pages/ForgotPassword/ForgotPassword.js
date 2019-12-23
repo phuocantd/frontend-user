@@ -2,11 +2,11 @@ import React, { PureComponent } from 'react';
 import { Layout, PageHeader, Button, Card } from 'antd';
 import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
-import LoginForm from '../../components/LoginForm/LoginForm';
-import './Login.css';
+import './ForgotPassword.css';
+import ForgotForm from '../../components/ForgotForm/ForgotForm';
 
 const { Content } = Layout;
-class Login extends PureComponent {
+class ForgotPassword extends PureComponent {
   render() {
     const { isLoggedIn, history } = this.props;
     if (isLoggedIn) {
@@ -15,9 +15,9 @@ class Login extends PureComponent {
     return (
       <Layout>
         <PageHeader
-          className="loginHeader"
-          title="Sign In"
-          onBack={() => history.push('/')}
+          className="forgotHeader"
+          title="Forgot Password"
+          onBack={() => history.push('/login')}
           extra={[
             <Link to="/register" key="signUpBtn">
               <Button type="primary">
@@ -26,9 +26,9 @@ class Login extends PureComponent {
             </Link>
           ]}
         />
-        <Content className="loginContent">
+        <Content className="forgotContent">
           <Card style={{ width: 350 }} hoverable>
-            <LoginForm />
+            <ForgotForm />
           </Card>
         </Content>
       </Layout>
@@ -42,4 +42,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps)(ForgotPassword);

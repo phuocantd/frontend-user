@@ -33,7 +33,14 @@ class DashboardDetail extends Component {
     };
   }
 
-  componentDidMount() {
+  componentDidUpdate(prevProps) {
+    const { role } = this.props;
+    if (prevProps.role !== role) {
+      this.fetchStatistic();
+    }
+  }
+
+  fetchStatistic = () => {
     const { token, role } = this.props;
     if (role !== 'student') {
       this.setState({ isRequest: true });
@@ -67,7 +74,7 @@ class DashboardDetail extends Component {
           }
         });
     }
-  }
+  };
 
   getClassNameCard = contract => {
     switch (contract._id) {
@@ -108,11 +115,14 @@ class DashboardDetail extends Component {
     const { data, isRequest } = this.state;
     let dataContract = data;
     if (isRequest) {
-      dataContract = Array.from(Array(4), () => ({
+      dataContract = Array.from(Array(6), () => ({
         _id: 'Unknown',
         numberOfContracts: 0,
         totalAmount: 0
       }));
+    }
+    if (typeof role === 'undefined') {
+      return null;
     }
     return (
       <Layout className="dashboardDetailLayout">
@@ -150,7 +160,10 @@ class DashboardDetail extends Component {
                   <Geom
                     type="interval"
                     position="_id*totalAmount"
-                    color={['_id', ['#39f', '#e55353', '#f9b115', '#2eb85c']]}
+                    color={[
+                      '_id',
+                      ['#39f', '#e55353', '#f9b115', '#2eb85c', '#321fdb']
+                    ]}
                   />
                 </Chart>
               </Card>

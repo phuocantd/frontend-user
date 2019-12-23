@@ -5,6 +5,8 @@ export default {
   register: () => `${DOMAIN}/auth/register`,
   login_facebook: () => `${DOMAIN}/auth/facebook`,
   login_google: () => `${DOMAIN}/auth/google`,
+  forgot_password: () => `${DOMAIN}/auth/forgotpassword`,
+  update_forgot_password: () => `${DOMAIN}/auth/updatepassword`,
   get_upload_avatar_url: () => `${DOMAIN}/users/upload`,
   update_user: () => `${DOMAIN}/users`,
   update_password: () => `${DOMAIN}/users/newpw`,
