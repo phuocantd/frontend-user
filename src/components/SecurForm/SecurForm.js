@@ -60,25 +60,26 @@ class SecurForm extends Component {
                 message.error(error.message);
               }
             });
+        } else {
+          services.user
+            .updatePassword(values.currentPassword, values.newPassword, token)
+            .then(response => {
+              this.setState({ submiting: false });
+              if (response.success) {
+                message.success('Password changed successfully');
+              } else {
+                message.error(response.error);
+              }
+            })
+            .catch(error => {
+              this.setState({ submiting: false });
+              if (error.response) {
+                message.error(error.response.data.error);
+              } else {
+                message.error(error.message);
+              }
+            });
         }
-        services.user
-          .updatePassword(values.currentPassword, values.newPassword, token)
-          .then(response => {
-            this.setState({ submiting: false });
-            if (response.success) {
-              message.success('Password changed successfully');
-            } else {
-              message.error(response.error);
-            }
-          })
-          .catch(error => {
-            this.setState({ submiting: false });
-            if (error.response) {
-              message.error(error.response.data.error);
-            } else {
-              message.error(error.message);
-            }
-          });
       }
     });
   };
@@ -115,9 +116,7 @@ class SecurForm extends Component {
           labelCol={formItemLayout.labelCol}
           wrapperCol={formItemLayout.wrapperCol}
           onSubmit={this.handleSubmit}
-          style={{
-            width: '450px'
-          }}
+          style={{ width: 450 }}
         >
           {!forgot ? (
             <Form.Item label="Password" hasFeedback>
