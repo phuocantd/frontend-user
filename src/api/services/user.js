@@ -37,6 +37,12 @@ export default {
       newPassword
     });
   },
+  updateAvatar(avatar, token) {
+    const url = config.url.update_avatar();
+    return api.putApiWithToken(url, token, {
+      avatar
+    });
+  },
   forgotPassword(email) {
     const url = config.url.forgot_password();
     return api.postApi(url, { email });
