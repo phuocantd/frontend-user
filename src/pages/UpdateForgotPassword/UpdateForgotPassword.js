@@ -22,7 +22,7 @@ class UpdateForgotPassword extends PureComponent {
           title="Update New Password"
         />
         <Content className="updateForgotContent">
-          <Card style={{ width: 350 }} hoverable>
+          <Card style={{ width: 450 }} hoverable>
             <SecurForm forgot token={params.token} />
           </Card>
         </Content>
