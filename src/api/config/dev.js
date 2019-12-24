@@ -9,6 +9,7 @@ export default {
   update_forgot_password: () => `${DOMAIN}/auth/updatepassword`,
   get_upload_avatar_url: () => `${DOMAIN}/users/upload`,
   update_user: () => `${DOMAIN}/users`,
+  update_avatar: () => `${DOMAIN}/users/newavatar`,
   update_password: () => `${DOMAIN}/users/newpw`,
   get_user: () => `${DOMAIN}/auth/me`,
   tutors: () => `${DOMAIN}/tutors`,
