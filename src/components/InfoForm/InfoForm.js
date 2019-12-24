@@ -167,7 +167,7 @@ class InfoForm extends Component {
           <Col>
             <Upload
               name="abc"
-              listType="picture"
+              listType="picture-card"
               className="avatar-uploader"
               showUploadList={false}
               headers={header}
@@ -176,7 +176,7 @@ class InfoForm extends Component {
               beforeUpload={this.beforeUpload}
               // onChange={this.handleChange}
             >
-              {user.avatar ? (
+              {user.avatar && !isLoading ? (
                 <img src={user.avatar} alt="avatar" style={{ width: '100%' }} />
               ) : (
                 uploadButton
