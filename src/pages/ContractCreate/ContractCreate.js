@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Layout, Steps, Icon, Row } from 'antd';
+import { Layout, Steps, Icon, Row, Statistic } from 'antd';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import ContractForm from '../../components/ContractForm/ContractForm';
@@ -46,6 +46,15 @@ class ContractCreate extends PureComponent {
             );
           })}
         </Steps>
+        <Statistic
+          title={
+            <span style={{ color: 'rgba(0, 0, 0, 0.45)' }}>
+              Account Balance
+            </span>
+          }
+          value={user.balance}
+          prefix="$"
+        />
         <Row type="flex" justify="space-around">
           <ContractForm id={params.id} />
         </Row>
