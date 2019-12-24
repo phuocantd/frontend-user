@@ -8,6 +8,7 @@ export default {
   get_upload_avatar_url: () => `${DOMAIN}/users/upload`,
   update_user: () => `${DOMAIN}/users`,
   update_password: () => `${DOMAIN}/users/newpw`,
+  recharge: () => `${DOMAIN}/users/recharge`,
   get_user: () => `${DOMAIN}/auth/me`,
   tutors: () => `${DOMAIN}/tutors`,
   detail_tutor: id => `${DOMAIN}/tutors/${id}`,

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import InfoForm from '../../components/InfoForm/InfoForm';
 import IntroForm from '../../components/IntroForm/IntroForm';
 import SecurForm from '../../components/SecurForm/SecurForm';
+import RechargeForm from '../../components/RechargeForm/RechargeForm';
 import './User.css';
 import { getTagsList, getSpecializationsList } from '../../actions/tutor';
 
@@ -29,6 +30,10 @@ const tabListStudent = [
   {
     key: 'secur',
     tab: 'Security'
+  },
+  {
+    key: 'recharge',
+    tab: 'Recharge'
   }
 ];
 class User extends Component {
@@ -73,6 +78,9 @@ class User extends Component {
     }
     if (currentKey === 'secur') {
       currentTab = <SecurForm user={user} token={token} />;
+    }
+    if (currentKey === 'recharge') {
+      currentTab = <RechargeForm user={user} token={token} />;
     }
     return (
       <Layout className="userLayout">
