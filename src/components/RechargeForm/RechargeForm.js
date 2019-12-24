@@ -58,7 +58,7 @@ class RechargeForm extends Component {
               <Form.Item label="Your Balance">
                 <InputNumber
                   style={{ width: '100%' }}
-                  defaultValue={`${user.balance}`}
+                  value={`${user.balance}`}
                   formatter={value =>
                     `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                   }
