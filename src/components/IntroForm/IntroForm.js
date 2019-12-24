@@ -6,6 +6,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import _ from 'lodash';
 import services from '../../api/services';
 import { updateTutorInfo } from '../../actions/user';
+import './IntroForm.css';
 
 const { Option } = Select;
 class IntroForm extends Component {
@@ -71,7 +72,7 @@ class IntroForm extends Component {
         },
         sm: {
           span: 16,
-          offset: 8
+          offset: 11
         }
       }
     };
