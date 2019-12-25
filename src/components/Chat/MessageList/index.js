@@ -5,7 +5,13 @@ import Message from '../Message';
 
 import './MessageList.css';
 
-export default function MessageList({ messages, user, onSendMessage }) {
+export default function MessageList({
+  user,
+  messages,
+  roomId,
+  token,
+  onSendMessage
+}) {
   const MY_USER_ID = user._id;
   const renderMessages = () => {
     let i = 0;
@@ -71,7 +77,7 @@ export default function MessageList({ messages, user, onSendMessage }) {
   return (
     <div className="message-list">
       <div className="message-list-container">{renderMessages()}</div>
-      <Compose onSendMessage={onSendMessage} />
+      <Compose roomId={roomId} token={token} onSendMessage={onSendMessage} />
     </div>
   );
 }

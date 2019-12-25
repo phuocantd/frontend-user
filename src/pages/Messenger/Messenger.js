@@ -114,7 +114,7 @@ class Messenger extends React.Component {
 
   render() {
     const { conversations, messages, roomId } = this.state;
-    const { user } = this.props;
+    const { user, token } = this.props;
     return (
       <div className="messenger">
         <div className="scrollable sidebar">
@@ -126,9 +126,10 @@ class Messenger extends React.Component {
 
         <div className="scrollable content">
           <MessageList
-            roomId={roomId}
             user={user}
             messages={messages}
+            roomId={roomId}
+            token={token}
             onSendMessage={(event, mes) => this.onSendMessage(event, mes)}
           />
         </div>
