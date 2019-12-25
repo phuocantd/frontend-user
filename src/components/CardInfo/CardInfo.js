@@ -77,14 +77,21 @@ export default class CardInfo extends Component {
                 </Tag>
               ))}
           </Row>
-          <Row style={{ marginTop: 10, marginBottom: 10 }}>
-            <Button
-              type="primary"
-              size="small"
-              onClick={() => this.handleOpen()}
-            >
-              <b>View Profile</b>
-            </Button>
+          <Row style={{ marginTop: 10, marginBottom: 10 }} gutter={[16, 16]}>
+            <Col span={10}>
+              <Button
+                type="primary"
+                size="small"
+                onClick={() => this.handleOpen()}
+              >
+                <b>View Profile</b>
+              </Button>
+            </Col>
+            <Col span={10}>
+              <Button type="primary" size="small">
+                <b>Chat</b>
+              </Button>
+            </Col>
           </Row>
         </Card>
         <ModalInfo

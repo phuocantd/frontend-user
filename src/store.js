@@ -1,4 +1,4 @@
-import { combineReducers, applyMiddleware, createStore } from 'redux';
+import { combineReducers, compose, applyMiddleware, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -24,5 +24,13 @@ const persistConfig = {
   whitelist: ['user']
 };
 const pReducer = persistReducer(persistConfig, rootReducer);
-export const store = createStore(pReducer, applyMiddleware(thunkMiddleware));
+export const store = createStore(
+  pReducer,
+  compose(
+    applyMiddleware(thunkMiddleware),
+    window.__REDUX_DEVTOOLS_EXTENSION__
+      ? window.__REDUX_DEVTOOLS_EXTENSION__()
+      : f => f
+  )
+);
 export const persistor = persistStore(store);

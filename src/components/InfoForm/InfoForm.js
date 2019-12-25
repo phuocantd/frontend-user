@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import {
   Input,
   Form,
@@ -19,7 +20,10 @@ class InfoForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false
+      isLoading: false,
+      // signedUrl: '',
+      imageUrl: '',
+      fileType: ''
     };
   }
 
@@ -52,7 +56,8 @@ class InfoForm extends Component {
     });
   };
 
-  beforeUpload = file => {
+  beforeUpload = async file => {
+    const { token, updateUserInfo } = this.props;
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
       message.error('You can only upload JPG/PNG file!');
@@ -61,35 +66,70 @@ class InfoForm extends Component {
     if (!isLt2M) {
       message.error('Image must smaller than 4MB!');
     }
-    return isJpgOrPng && isLt2M;
-  };
 
-  handleChange = info => {
-    if (info.file.status === 'uploading') {
-      this.setState({ isLoading: true });
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      this.setState({ isLoading: false });
-      if (info.file.response) {
-        const { response } = info.file;
-        const { updateUserInfo } = this.props;
-        if (response.error >= 0 && response.data.user) {
-          updateUserInfo(response.data.user);
-          message.success('Avatar changed');
-        } else {
-          message.error(response.data.message);
+    if (isJpgOrPng && isLt2M) {
+      const fileParts = file.name.split('.');
+      const fileName = fileParts[0];
+      const fileType = fileParts[1];
+      const response = await axios.post(
+        config.url.get_upload_avatar_url(),
+        {
+          fileName,
+          fileType
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const { returnUrl } = response.data.data;
+      this.setState({
+        // signedUrl: returnUrl.signedUrl,
+        imageUrl: returnUrl.imageUrl,
+        fileType,
+        isLoading: true
+      });
+
+      await axios.put(returnUrl.signedUrl, file, {
+        headers: {
+          'Content-Type': fileType
         }
+      });
+
+      const { imageUrl } = this.state;
+      const res = await services.user.updateAvatar(imageUrl, token);
+      this.setState({
+        isLoading: false
+      });
+
+      if (res && res.success) {
+        updateUserInfo(res.data);
+        message.success('Avatar changed');
+      } else {
+        message.error(res.error);
       }
     }
+    return isJpgOrPng && isLt2M;
   };
+  // handleChange = info => {
+  //   if (info.file.status === 'uploading') {
+  //     this.setState({ isLoading: true });
+  //     return;
+  //   }
+  //   if (info.file.status === 'done') {
+  //     this.setState({ isLoading: false });
+  //     const {user, updateUserInfo} = this.props;
+  //     const {imageUrl} = this.state;
+  //     updateUserInfo({
+  //       ...user,
+  //       avatar: imageUrl
+  //     });
+  //     message.success('Avatar changed');
+  //   }
+  // };
 
   render() {
-    const { form, token, user } = this.props;
-    const { isLoading } = this.state;
+    const { form, user } = this.props;
+    // const { signedUrl } = this.state;
+    const { isLoading, fileType } = this.state;
     const { getFieldDecorator } = form;
-    const uploadUrl = config.url.get_upload_avatar_url();
     const uploadButton = (
       <div>
         <Icon type={isLoading ? 'loading' : 'plus'} />
@@ -97,7 +137,7 @@ class InfoForm extends Component {
       </div>
     );
     const header = {
-      Authorization: `Bearer ${token}`
+      'Content-Type': fileType
     };
     const formItemLayout = {
       labelCol: {
@@ -126,16 +166,17 @@ class InfoForm extends Component {
         <Row type="flex" justify="center" align="middle">
           <Col>
             <Upload
-              name="file"
+              name="abc"
               listType="picture-card"
               className="avatar-uploader"
               showUploadList={false}
-              action={uploadUrl}
               headers={header}
+              // method="put"
+              // action={signedUrl}
               beforeUpload={this.beforeUpload}
-              onChange={this.handleChange}
+              // onChange={this.handleChange}
             >
-              {user.avatar ? (
+              {user.avatar && !isLoading ? (
                 <img src={user.avatar} alt="avatar" style={{ width: '100%' }} />
               ) : (
                 uploadButton

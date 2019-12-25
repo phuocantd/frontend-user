@@ -78,11 +78,18 @@ export const getTutorsNoCondition = item => {
   };
 };
 export const getTutorsCondition = item => {
-  const { address, tag, specialization, paymentPerHour, page } = item;
+  const { address, tag, specialization, paymentPerHour, page, sort } = item;
   return async dispatch => {
     dispatch(startRequest());
     await services.tutor
-      .getTutorCondition(address, paymentPerHour, specialization, tag, page)
+      .getTutorCondition(
+        address,
+        paymentPerHour,
+        specialization,
+        tag,
+        page,
+        sort
+      )
       .then(response => {
         dispatch(endRequest());
         if (response.success) {
