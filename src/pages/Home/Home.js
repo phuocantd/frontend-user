@@ -32,6 +32,7 @@ import services from '../../api/services';
 const { Content } = Layout;
 const { Text } = Typography;
 const image1 = require('../../assets/images/image1.jpg');
+const user2 = require('../../assets/images/user2.png');
 
 const sample = {
   _id: 0,
@@ -185,7 +186,7 @@ class Home extends Component {
               <Contributor
                 fullName="Nguyễn Phước An"
                 title="Web Developer"
-                avatar="https://cdn.discordapp.com/avatars/545609049752862730/cefeac26128ea72ac246bf14902e6b1d.png?size=256"
+                avatar={user2}
               >
                 <Flex />
               </Contributor>

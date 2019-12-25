@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Button } from 'antd';
+import { Layout } from 'antd';
 import '../Header.css';
 
 const { Header } = Layout;
@@ -20,9 +20,6 @@ export default class PublicHeader extends PureComponent {
           <Link className="headerItem" to="/register">
             <b>SIGN UP</b>
           </Link>
-          <Button type="primary">
-            <b>FIND TUTOR</b>
-          </Button>
         </div>
       </Header>
     );
