@@ -22,5 +22,7 @@ export default {
   detail_contract: id => `${DOMAIN}/contracts/${id}`,
   complaints: () => `${DOMAIN}/complaints`,
   complaint_detail: id => `${DOMAIN}/complaints/${id}`,
-  statistics: () => `${DOMAIN}/statistics/contracts`
+  statistics: () => `${DOMAIN}/statistics/contracts`,
+  rooms: () => `${DOMAIN}/chats`,
+  room_detail: id => `${DOMAIN}/chats/${id}`
 };

@@ -143,7 +143,14 @@ class TutorForm extends Component {
 
   render() {
     const { page, visible } = this.state;
-    const { isRequest, tutors, tags, specializations, count } = this.props;
+    const {
+      isRequest,
+      tutors,
+      tags,
+      specializations,
+      count,
+      token
+    } = this.props;
     let dataTutor = tutors;
     if (isRequest) {
       dataTutor = Array.from(Array(8), () => sample);
@@ -324,7 +331,7 @@ class TutorForm extends Component {
         <Row gutter={[16, 16]} key={_.uniqueId('row_')}>
           {dataTutor.map(data => (
             <Col key={_.uniqueId('col_')} span={6}>
-              <CardInfo data={data} loading={isRequest} />
+              <CardInfo data={data} loading={isRequest} token={token} />
             </Col>
           ))}
         </Row>
@@ -348,7 +355,8 @@ const mapStateToProps = state => {
     tutors: state.tutor.tutors,
     tags: state.tutor.tags,
     specializations: state.tutor.specializations,
-    count: state.tutor.pagination.count
+    count: state.tutor.pagination.count,
+    token: state.user.token
   };
 };
 

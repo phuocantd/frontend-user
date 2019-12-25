@@ -8,11 +8,13 @@ import {
   Row,
   Divider,
   Button,
-  Popover
+  Popover,
+  message
 } from 'antd';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import ModalInfo from '../ModalInfo/ModalInfo';
+import services from '../../api/services';
 
 const { Meta } = Card;
 export default class CardInfo extends Component {
@@ -29,6 +31,37 @@ export default class CardInfo extends Component {
 
   handleOpen = () => {
     this.setState({ visible: true });
+  };
+
+  handleCreateRoom = id => {
+    const { token } = this.props;
+    // this.setState({
+    //   isLoading: true
+    // });
+    services.chat
+      .createRoom(token, { tutor: id })
+      .then(response => {
+        // this.setState({
+        //   isLoading: false
+        // });
+        if (response.success) {
+          message.success(
+            'Create room success, now you can chat with this tutor'
+          );
+        } else {
+          message.error(response.error);
+        }
+      })
+      .catch(error => {
+        // this.setState({
+        //   isLoading: false
+        // });
+        if (error.response) {
+          message.error(error.response.data.error);
+        } else {
+          message.error(error.message);
+        }
+      });
   };
 
   render() {
@@ -88,7 +121,11 @@ export default class CardInfo extends Component {
               </Button>
             </Col>
             <Col span={10}>
-              <Button type="primary" size="small">
+              <Button
+                type="primary"
+                size="small"
+                onClick={() => this.handleCreateRoom(data._id)}
+              >
                 <b>Chat</b>
               </Button>
             </Col>
