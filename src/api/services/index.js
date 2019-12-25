@@ -4,6 +4,7 @@ import tutor from './tutor';
 import complaint from './complaint';
 import contract from './contract';
 import statistic from './statistic';
+import chat from './chat';
 
 export default {
   user,
@@ -11,5 +12,6 @@ export default {
   tutor,
   complaint,
   contract,
-  statistic
+  statistic,
+  chat
 };

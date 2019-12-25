@@ -1,6 +1,8 @@
-const DOMAIN = 'https://zapi-user.herokuapp.com/api';
+const DOMAIN = 'http://localhost:5000/api';
+const DOMAIN_NOT_API = 'http://localhost:5000/';
 
 export default {
+  DOMAIN_NOT_API,
   login: () => `${DOMAIN}/auth/login`,
   register: () => `${DOMAIN}/auth/register`,
   login_facebook: () => `${DOMAIN}/auth/facebook`,
@@ -21,5 +23,7 @@ export default {
   detail_contract: id => `${DOMAIN}/contracts/${id}`,
   complaints: () => `${DOMAIN}/complaints`,
   complaint_detail: id => `${DOMAIN}/complaints/${id}`,
-  statistics: () => `${DOMAIN}/statistics/contracts`
+  statistics: () => `${DOMAIN}/statistics/contracts`,
+  rooms: () => `${DOMAIN}/chats`,
+  room_detail: id => `${DOMAIN}/chats/${id}`
 };
