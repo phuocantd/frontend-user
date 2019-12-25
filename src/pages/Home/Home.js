@@ -26,6 +26,7 @@ import {
   Checklist,
   Contributor
 } from 'react-landing-page';
+import _ from 'lodash';
 import './Home.css';
 import services from '../../api/services';
 
@@ -153,7 +154,7 @@ class Home extends Component {
               {dataTutor
                 .filter(tutor => tutor.userInfo)
                 .map(tutor => (
-                  <Col span={6}>
+                  <Col span={6} key={_.uniqueId('col_')}>
                     <Card hoverable style={{ width: 300 }} loading={isRequest}>
                       <Card.Meta
                         avatar={

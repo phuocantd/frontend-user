@@ -63,10 +63,11 @@ class TutorForm extends Component {
   }
 
   componentDidMount() {
-    const { fetchSpecializations, fetchTags, fetchTutor } = this.props;
+    const { fetchSpecializations, fetchTags } = this.props;
     fetchSpecializations({ message });
     fetchTags({ message });
-    fetchTutor({ message });
+    // fetchTutor({ message });
+    this.findTutorConditional();
   }
 
   handleAddressChange = val => {
