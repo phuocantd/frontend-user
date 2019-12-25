@@ -14,7 +14,6 @@ import NotFound from './pages/Error/NotFound';
 import NotAuth from './pages/Error/NotAuth';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import UpdateForgotPassword from './pages/UpdateForgotPassword/UpdateForgotPassword';
-import Messenger from './pages/Messenger/Messenger';
 
 function App() {
   return (
@@ -28,11 +27,6 @@ function App() {
           authed
         />
         <RouteWithLayout layout={Main} path="/user" component={User} authed />
-        <RouteWithLayout
-          layout={Main}
-          path="/messenger"
-          component={Messenger}
-        />
         <RouteWithLayout layout={Empty} path="/login" component={Login} />
         <RouteWithLayout layout={Empty} path="/register" component={Register} />
         <RouteWithLayout

@@ -33,7 +33,8 @@ export default class CardInfo extends Component {
     this.setState({ visible: true });
   };
 
-  handleCreateRoom = id => {
+  handleCreateRoom = (event, id) => {
+    event.stopPropagation();
     const { token } = this.props;
     // this.setState({
     //   isLoading: true
@@ -62,6 +63,19 @@ export default class CardInfo extends Component {
           message.error(error.message);
         }
       });
+  };
+
+  getAddress = address => {
+    let res = 'Unknown';
+    if (address) {
+      const arrAddress = address.split(', ');
+      if (arrAddress.length > 1) {
+        res = arrAddress.pop();
+      } else {
+        res = `${address.substring(0, 10)}...`;
+      }
+    }
+    return res;
   };
 
   render() {
@@ -94,11 +108,7 @@ export default class CardInfo extends Component {
             <Col span={12}>
               <Statistic value={data.paymentPerHour} suffix="/hr" />
             </Col>
-            <Col span={12}>
-              {(userInfo.address &&
-                (userInfo.address.split(', ').pop() || userInfo.address)) ||
-                'Unknown'}
-            </Col>
+            <Col span={12}>{this.getAddress(userInfo.address)}</Col>
           </Row>
           <Divider style={{ marginTop: 10, marginBottom: 10 }} />
           <Row>
@@ -124,7 +134,7 @@ export default class CardInfo extends Component {
               <Button
                 type="primary"
                 size="small"
-                onClick={() => this.handleCreateRoom(data._id)}
+                onClick={e => this.handleCreateRoom(e, data._id)}
               >
                 <b>Chat</b>
               </Button>

@@ -9,6 +9,7 @@ import DashboardDetail from '../DashboardDetail/DashboardDetail';
 import ContractCreate from '../ContractCreate/ContractCreate';
 import ComplaintDetail from '../ComplaintDetail/ComplaintDetail';
 import ComplaintCreate from '../ComplaintCreate/ComplaintCreate';
+import Messenger from '../Messenger/Messenger';
 
 const { Sider, Content } = Layout;
 export default class Dashboard extends PureComponent {
@@ -42,6 +43,12 @@ export default class Dashboard extends PureComponent {
                 <span>Complaints</span>
               </Link>
             </Menu.Item>
+            <Menu.Item key={`${url}/messenger`}>
+              <Link to={`${url}/messenger`}>
+                <Icon type="wechat" />
+                <span>Messenger</span>
+              </Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Content className="dashboardContent">
@@ -68,6 +75,7 @@ export default class Dashboard extends PureComponent {
             exact
             component={ComplaintCreate}
           />
+          <Route path={`${path}/messenger`} exact component={Messenger} />
         </Content>
       </Layout>
     );

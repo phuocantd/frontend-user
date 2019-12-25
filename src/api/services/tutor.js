@@ -52,5 +52,9 @@ export default {
   getTutor(id) {
     const url = config.url.detail_tutor(id);
     return api.getApi(url);
+  },
+  getTopTutor() {
+    const url = config.url.top_tutors();
+    return api.getApi(url);
   }
 };

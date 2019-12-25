@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { Empty } from 'antd';
 import Compose from '../Compose';
 import Message from '../Message';
 
@@ -70,6 +71,9 @@ export default function MessageList({
 
       // Proceed to the next message.
       i += 1;
+    }
+    if (tempMessages.length === 0) {
+      return <Empty />;
     }
 
     return tempMessages;

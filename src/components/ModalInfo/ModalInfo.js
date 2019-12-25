@@ -11,7 +11,7 @@ import {
   Rate,
   List
 } from 'antd';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import Meta from 'antd/lib/card/Meta';
 
@@ -35,7 +35,7 @@ class ModalInfo extends PureComponent {
       >
         <Meta
           avatar={<Avatar size={64} src={userInfo.avatar} />}
-          title={<Link to="/profile">{userInfo.name}</Link>}
+          title={userInfo.name}
           description={data.specialization.name}
         />
         <Row type="flex" gutter={16} align="middle" justify="center">

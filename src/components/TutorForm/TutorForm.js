@@ -9,7 +9,8 @@ import {
   Pagination,
   Drawer,
   Button,
-  Form
+  Form,
+  Empty
 } from 'antd';
 import { connect } from 'react-redux';
 import Parser from 'html-react-parser';
@@ -143,14 +144,7 @@ class TutorForm extends Component {
 
   render() {
     const { page, visible } = this.state;
-    const {
-      isRequest,
-      tutors,
-      tags,
-      specializations,
-      count,
-      token
-    } = this.props;
+    const { isRequest, tutors, tags, specializations, count } = this.props;
     let dataTutor = tutors;
     if (isRequest) {
       dataTutor = Array.from(Array(8), () => sample);
@@ -316,25 +310,24 @@ class TutorForm extends Component {
           type="primary"
           style={{ margin: 15 }}
           onClick={() => this.setState({ visible: true })}
+          icon="filter"
         >
           Filter
         </Button>
-        {/* {_.chunk(dataTutor, 4).map(chunk => (
-          <Row gutter={[16, 16]} key={_.uniqueId('row_')}>
-            {chunk.map(data => (
-              <Col key={_.uniqueId('col_')} span={6}>
-                <CardInfo data={data} loading={isRequest} />
-              </Col>
-            ))}
-          </Row>
-        ))} */}
-        <Row gutter={[16, 16]} key={_.uniqueId('row_')}>
-          {dataTutor.map(data => (
-            <Col key={_.uniqueId('col_')} span={6}>
-              <CardInfo data={data} loading={isRequest} token={token} />
-            </Col>
-          ))}
-        </Row>
+
+        {dataTutor.length === 0 ? (
+          <Empty />
+        ) : (
+          _.chunk(dataTutor, 4).map(chunk => (
+            <Row gutter={[16, 16]} key={_.uniqueId('row_')}>
+              {chunk.map(data => (
+                <Col key={_.uniqueId('col_')} span={6}>
+                  <CardInfo data={data} loading={isRequest} />
+                </Col>
+              ))}
+            </Row>
+          ))
+        )}
         <Pagination
           defaultCurrent={1}
           current={page}

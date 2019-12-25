@@ -1,5 +1,5 @@
-const DOMAIN = 'http://localhost:5000/api';
-const DOMAIN_NOT_API = 'http://localhost:5000/';
+const DOMAIN = 'https://zapi-user.herokuapp.com/api';
+const DOMAIN_NOT_API = 'https://zapi-user.herokuapp.com/';
 
 export default {
   DOMAIN_NOT_API,
@@ -16,6 +16,7 @@ export default {
   recharge: () => `${DOMAIN}/users/recharge`,
   get_user: () => `${DOMAIN}/auth/me`,
   tutors: () => `${DOMAIN}/tutors`,
+  top_tutors: () => `${DOMAIN}/tutors`,
   detail_tutor: id => `${DOMAIN}/tutors/${id}`,
   get_tags: () => `${DOMAIN}/tags`,
   get_specializations: () => `${DOMAIN}/specializations`,
