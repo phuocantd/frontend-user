@@ -26,6 +26,7 @@
     "redux-persist": "^6.0.0",
     "redux-persist-transform-encrypt": "^2.0.1",
     "redux-thunk": "^2.3.0",
+    "shave": "^2.5.7",
     "socket.io-client": "^2.3.0"
   },
   "scripts": {
