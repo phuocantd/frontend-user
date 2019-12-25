@@ -8,6 +8,7 @@ import './MessageList.css';
 export default function MessageList({
   user,
   messages,
+  socket,
   roomId,
   token,
   onSendMessage
@@ -77,7 +78,12 @@ export default function MessageList({
   return (
     <div className="message-list">
       <div className="message-list-container">{renderMessages()}</div>
-      <Compose roomId={roomId} token={token} onSendMessage={onSendMessage} />
+      <Compose
+        roomId={roomId}
+        socket={socket}
+        token={token}
+        onSendMessage={onSendMessage}
+      />
     </div>
   );
 }

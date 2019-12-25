@@ -58,14 +58,25 @@ class Messenger extends React.Component {
       });
 
     // socket io
-    const socket = io(config.url.DOMAIN_NOT_API).on('server-say-helo', data => {
-      console.log(data);
-    });
+    const socket = io(config.url.DOMAIN_NOT_API)
+      .on('server-say-helo', data => {
+        console.log(data);
+      })
+      .on('guest-request-chat', mess => {
+        this.onReceiveMessage(mess);
+      });
 
     this.setState({
       socket
     });
   }
+
+  onReceiveMessage = mess => {
+    const { messages } = this.state;
+    this.setState({
+      messages: messages.concat(mess)
+    });
+  };
 
   onSendMessage = (event, mess) => {
     const { messages } = this.state;
@@ -113,7 +124,7 @@ class Messenger extends React.Component {
   }
 
   render() {
-    const { conversations, messages, roomId } = this.state;
+    const { conversations, messages, roomId, socket } = this.state;
     const { user, token } = this.props;
     return (
       <div className="messenger">
@@ -128,6 +139,7 @@ class Messenger extends React.Component {
           <MessageList
             user={user}
             messages={messages}
+            socket={socket}
             roomId={roomId}
             token={token}
             onSendMessage={(event, mes) => this.onSendMessage(event, mes)}

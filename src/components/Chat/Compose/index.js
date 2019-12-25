@@ -21,13 +21,15 @@ class Compose extends React.Component {
 
   onPressEnter = e => {
     e.persist();
-    const { token, roomId, onSendMessage } = this.props;
+    const { token, roomId, onSendMessage, socket } = this.props;
     const { mess } = this.state;
+    const messageObj = { message: mess };
     services.chat
-      .sendMessage(token, roomId, { message: mess })
+      .sendMessage(token, roomId, messageObj)
       .then(response => {
         if (response.success) {
           onSendMessage(e, response.data);
+          socket.emit('client-send-message', roomId, response.data);
         } else {
           message.error(response.error);
         }
