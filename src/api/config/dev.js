@@ -1,6 +1,7 @@
 const DOMAIN = 'https://zapi-user.herokuapp.com/api';
 
 export default {
+  DOMAIN,
   login: () => `${DOMAIN}/auth/login`,
   register: () => `${DOMAIN}/auth/register`,
   login_facebook: () => `${DOMAIN}/auth/facebook`,

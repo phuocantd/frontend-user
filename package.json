@@ -25,7 +25,8 @@
     "redux": "^4.0.4",
     "redux-persist": "^6.0.0",
     "redux-persist-transform-encrypt": "^2.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "socket.io-client": "^2.3.0"
   },
   "scripts": {
     "start": "react-app-rewired --max_old_space_size=2048 start",
