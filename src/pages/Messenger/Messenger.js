@@ -18,7 +18,6 @@ class Messenger extends React.Component {
 
   componentDidMount() {
     const { token } = this.props;
-
     // get list rooms
     services.chat
       .getRooms(token)
@@ -55,17 +54,27 @@ class Messenger extends React.Component {
         }
       });
 
-    // get list message
+    // socket io
+  }
 
+  handleClick(id) {
+    this.setState({
+      roomId: id
+    });
+
+    const { token } = this.props;
+
+    // get list message
     services.chat
-      // .getDetailRoom(props.token, id)
-      .getDetailRoom(token, '5e030a44edbdd84500831b85')
+      .getDetailRoom(token, id)
       .then(response => {
         // this.setState({
         //   isLoading: false
         // });
         if (response.success) {
-          this.setState({ messages: response.data.messages });
+          this.setState({
+            messages: response.data.messages || []
+          });
         } else {
           message.error(response.error);
         }
@@ -82,15 +91,8 @@ class Messenger extends React.Component {
       });
   }
 
-  handleClick(id) {
-    this.setState({
-      roomId: id
-    });
-  }
-
   render() {
     const { conversations, messages, roomId } = this.state;
-    // const { token } = this.props;
     return (
       <div className="messenger">
         <div className="scrollable sidebar">
