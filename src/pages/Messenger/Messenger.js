@@ -1,10 +1,12 @@
 import React from 'react';
 import { message } from 'antd';
 import { connect } from 'react-redux';
+import io from 'socket.io-client';
 import ConversationList from '../../components/Chat/ConversationList';
 import MessageList from '../../components/Chat/MessageList';
 import services from '../../api/services';
 import './Messenger.css';
+import config from '../../api/config/index';
 
 class Messenger extends React.Component {
   constructor(props) {
@@ -12,7 +14,8 @@ class Messenger extends React.Component {
     this.state = {
       conversations: [],
       messages: [],
-      roomId: ''
+      roomId: '',
+      socket: ''
     };
   }
 
@@ -55,7 +58,24 @@ class Messenger extends React.Component {
       });
 
     // socket io
+    const socket = io(config.url.DOMAIN_NOT_API).on('server-say-helo', data => {
+      console.log(data);
+    });
+
+    this.setState({
+      socket
+    });
   }
+
+  onSendMessage = (event, mess) => {
+    const { messages } = this.state;
+
+    if (event.key === 'Enter') {
+      this.setState({
+        messages: messages.concat(mess)
+      });
+    }
+  };
 
   handleClick(id) {
     this.setState({
@@ -63,7 +83,7 @@ class Messenger extends React.Component {
     });
 
     const { token } = this.props;
-
+    const { socket } = this.state;
     // get list message
     services.chat
       .getDetailRoom(token, id)
@@ -75,6 +95,7 @@ class Messenger extends React.Component {
           this.setState({
             messages: response.data.messages || []
           });
+          socket.emit('join-room', id);
         } else {
           message.error(response.error);
         }
@@ -93,6 +114,7 @@ class Messenger extends React.Component {
 
   render() {
     const { conversations, messages, roomId } = this.state;
+    const { user } = this.props;
     return (
       <div className="messenger">
         <div className="scrollable sidebar">
@@ -103,7 +125,12 @@ class Messenger extends React.Component {
         </div>
 
         <div className="scrollable content">
-          <MessageList roomId={roomId} messages={messages} />
+          <MessageList
+            roomId={roomId}
+            user={user}
+            messages={messages}
+            onSendMessage={(event, mes) => this.onSendMessage(event, mes)}
+          />
         </div>
       </div>
     );
@@ -112,7 +139,8 @@ class Messenger extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    token: state.user.token
+    token: state.user.token,
+    user: state.user.user
   };
 };
 

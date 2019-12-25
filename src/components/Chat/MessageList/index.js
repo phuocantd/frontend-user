@@ -5,9 +5,8 @@ import Message from '../Message';
 
 import './MessageList.css';
 
-const MY_USER_ID = '5df27543267f38167c399770';
-
-export default function MessageList({ messages }) {
+export default function MessageList({ messages, user, onSendMessage }) {
+  const MY_USER_ID = user._id;
   const renderMessages = () => {
     let i = 0;
     const messageCount = messages.length;
@@ -72,7 +71,7 @@ export default function MessageList({ messages }) {
   return (
     <div className="message-list">
       <div className="message-list-container">{renderMessages()}</div>
-      <Compose />
+      <Compose onSendMessage={onSendMessage} />
     </div>
   );
 }
