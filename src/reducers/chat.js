@@ -18,7 +18,7 @@ const chatReducer = (state = initialState, action) => {
         ...state,
         messages: [
           ...state.messages,
-          payload // {message, time, typeMessage}
+          payload // message: {content, time, from}
         ]
       };
     case CLEAR_CHAT:

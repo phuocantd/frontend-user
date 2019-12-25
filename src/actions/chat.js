@@ -1,23 +1,19 @@
 import { ADD_MESSAGE } from './types';
 
-const addMessage = (message, time, typeMessage) => {
+const addMessage = message => {
   return {
     type: ADD_MESSAGE,
-    payload: {
-      message,
-      time,
-      typeMessage
-    }
+    payload: message
   };
 };
 
-export const sendMessage = (roomId, message, time, socket) => dispatch => {
+export const sendMessage = (roomId, message, socket) => dispatch => {
   socket.emit('client-send-message', roomId, message);
-  dispatch(addMessage(message, time, 'send'));
+  dispatch(addMessage(message));
 };
 
 export const listenChat = socket => dispatch => {
-  socket.on('guest-request-chat', (message, time) => {
-    dispatch(addMessage(message, time, 'receive'));
+  socket.on('guest-request-chat', message => {
+    dispatch(addMessage(message));
   });
 };
