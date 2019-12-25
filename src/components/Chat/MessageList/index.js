@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import { message } from 'antd';
 import Compose from '../Compose';
 import Message from '../Message';
+import services from '../../../api/services';
 
 import './MessageList.css';
 
-const MY_USER_ID = 'apple';
+const MY_USER_ID = '5df27543267f38167c399770';
 
 export default function MessageList(props) {
   const [messages, setMessages] = useState([]);
@@ -16,80 +18,29 @@ export default function MessageList(props) {
   }, []);
 
   const getMessages = () => {
-    console.log(props);
-    const tempMessages = [
-      {
-        id: 1,
-        author: 'apple',
-        message:
-          'Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.',
-        timestamp: new Date().getTime()
-      },
-      {
-        id: 2,
-        author: 'orange',
-        message:
-          'It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!',
-        timestamp: new Date().getTime()
-      },
-      {
-        id: 3,
-        author: 'orange',
-        message:
-          'Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.',
-        timestamp: new Date().getTime()
-      },
-      {
-        id: 4,
-        author: 'apple',
-        message:
-          'It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!',
-        timestamp: new Date().getTime()
-      },
-      {
-        id: 5,
-        author: 'apple',
-        message:
-          'Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.',
-        timestamp: new Date().getTime()
-      },
-      {
-        id: 6,
-        author: 'apple',
-        message:
-          'It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!',
-        timestamp: new Date().getTime()
-      },
-      {
-        id: 7,
-        author: 'orange',
-        message:
-          'Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.',
-        timestamp: new Date().getTime()
-      },
-      {
-        id: 8,
-        author: 'orange',
-        message:
-          'It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!',
-        timestamp: new Date().getTime()
-      },
-      {
-        id: 9,
-        author: 'apple',
-        message:
-          'Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.',
-        timestamp: new Date().getTime()
-      },
-      {
-        id: 10,
-        author: 'orange',
-        message:
-          'It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!',
-        timestamp: new Date().getTime()
-      }
-    ];
-    setMessages([...messages, ...tempMessages]);
+    services.chat
+      // .getDetailRoom(props.token, id)
+      .getDetailRoom(props.token, '5e030a44edbdd84500831b85')
+      .then(response => {
+        // this.setState({
+        //   isLoading: false
+        // });
+        if (response.success) {
+          setMessages([...messages, ...response.data.messages]);
+        } else {
+          message.error(response.error);
+        }
+      })
+      .catch(error => {
+        // this.setState({
+        //   isLoading: false
+        // });
+        if (error.response) {
+          message.error(error.response.data.error);
+        } else {
+          message.error(error.message);
+        }
+      });
   };
 
   const renderMessages = () => {
