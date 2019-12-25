@@ -1,48 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import moment from 'moment';
-import { message } from 'antd';
 import Compose from '../Compose';
 import Message from '../Message';
-import services from '../../../api/services';
 
 import './MessageList.css';
 
 const MY_USER_ID = '5df27543267f38167c399770';
 
-export default function MessageList(props) {
-  const [messages, setMessages] = useState([]);
-
-  useEffect(() => {
-    // eslint-disable-next-line no-use-before-define
-    getMessages();
-  }, []);
-
-  const getMessages = () => {
-    services.chat
-      // .getDetailRoom(props.token, id)
-      .getDetailRoom(props.token, '5e030a44edbdd84500831b85')
-      .then(response => {
-        // this.setState({
-        //   isLoading: false
-        // });
-        if (response.success) {
-          setMessages([...messages, ...response.data.messages]);
-        } else {
-          message.error(response.error);
-        }
-      })
-      .catch(error => {
-        // this.setState({
-        //   isLoading: false
-        // });
-        if (error.response) {
-          message.error(error.response.data.error);
-        } else {
-          message.error(error.message);
-        }
-      });
-  };
-
+export default function MessageList({ messages }) {
   const renderMessages = () => {
     let i = 0;
     const messageCount = messages.length;

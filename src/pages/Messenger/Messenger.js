@@ -11,6 +11,7 @@ class Messenger extends React.Component {
     super(props);
     this.state = {
       conversations: [],
+      messages: [],
       roomId: ''
     };
   }
@@ -55,6 +56,30 @@ class Messenger extends React.Component {
       });
 
     // get list message
+
+    services.chat
+      // .getDetailRoom(props.token, id)
+      .getDetailRoom(token, '5e030a44edbdd84500831b85')
+      .then(response => {
+        // this.setState({
+        //   isLoading: false
+        // });
+        if (response.success) {
+          this.setState({ messages: response.data.messages });
+        } else {
+          message.error(response.error);
+        }
+      })
+      .catch(error => {
+        // this.setState({
+        //   isLoading: false
+        // });
+        if (error.response) {
+          message.error(error.response.data.error);
+        } else {
+          message.error(error.message);
+        }
+      });
   }
 
   handleClick(id) {
@@ -64,8 +89,8 @@ class Messenger extends React.Component {
   }
 
   render() {
-    const { conversations, roomId } = this.state;
-    const { token } = this.props;
+    const { conversations, messages, roomId } = this.state;
+    // const { token } = this.props;
     return (
       <div className="messenger">
         <div className="scrollable sidebar">
@@ -76,7 +101,7 @@ class Messenger extends React.Component {
         </div>
 
         <div className="scrollable content">
-          <MessageList roomId={roomId} token={token} />
+          <MessageList roomId={roomId} messages={messages} />
         </div>
       </div>
     );
