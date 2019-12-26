@@ -371,7 +371,9 @@ class ContractDetail extends Component {
               allowHalf
               onChange={val => this.setState({ rating: val })}
               value={data.rating || rating}
-              disabled={typeof data.rating !== 'undefined'}
+              disabled={
+                typeof data.rating !== 'undefined' || user.role !== 'student'
+              }
             />
           </Descriptions.Item>
           <Descriptions.Item label="Review" span={3}>
@@ -385,7 +387,7 @@ class ContractDetail extends Component {
               }
               author={(data.student && data.student.userInfo.name) || 'Unknown'}
               content={
-                _.isEmpty(data.review) ? (
+                _.isEmpty(data.review) && user.role === 'student' ? (
                   <Editor
                     onChange={this.handleChange}
                     onSubmit={this.handleSubmit}
