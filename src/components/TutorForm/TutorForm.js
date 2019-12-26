@@ -145,7 +145,14 @@ class TutorForm extends Component {
 
   render() {
     const { page, visible } = this.state;
-    const { isRequest, tutors, tags, specializations, count } = this.props;
+    const {
+      isRequest,
+      tutors,
+      tags,
+      specializations,
+      count,
+      token
+    } = this.props;
     let dataTutor = tutors;
     if (isRequest) {
       dataTutor = Array.from(Array(8), () => sample);
@@ -323,7 +330,7 @@ class TutorForm extends Component {
             <Row gutter={[16, 16]} key={_.uniqueId('row_')}>
               {chunk.map(data => (
                 <Col key={_.uniqueId('col_')} span={6}>
-                  <CardInfo data={data} loading={isRequest} />
+                  <CardInfo data={data} loading={isRequest} token={token} />
                 </Col>
               ))}
             </Row>
