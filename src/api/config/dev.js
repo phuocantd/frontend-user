@@ -16,7 +16,7 @@ export default {
   recharge: () => `${DOMAIN}/users/recharge`,
   get_user: () => `${DOMAIN}/auth/me`,
   tutors: () => `${DOMAIN}/tutors`,
-  top_tutors: () => `${DOMAIN}/tutors`,
+  top_tutors: () => `${DOMAIN}/tutors/tops/rating`,
   detail_tutor: id => `${DOMAIN}/tutors/${id}`,
   get_tags: () => `${DOMAIN}/tags`,
   get_specializations: () => `${DOMAIN}/specializations`,
