@@ -29,8 +29,15 @@ class DashboardDetail extends Component {
     super(props);
     this.state = {
       data: [],
-      isRequest: true
+      isRequest: false
     };
+  }
+
+  componentDidMount() {
+    const { role } = this.props;
+    if (role !== 'student') {
+      this.fetchStatistic();
+    }
   }
 
   componentDidUpdate(prevProps) {
