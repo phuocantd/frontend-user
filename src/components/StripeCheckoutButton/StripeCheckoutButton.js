@@ -7,6 +7,7 @@ import { updateUser } from '../../actions/user';
 
 const StripeCheckoutButton = ({ price, token, user, updateUserInfo }) => {
   let { balance } = user;
+  const { role } = user;
   const publishableKey = 'pk_test_l91gEMBL5Pv0QMKv2MMHGIpG00GDV5uA8Q';
 
   const priceForStripe = price * 100;
@@ -20,7 +21,11 @@ const StripeCheckoutButton = ({ price, token, user, updateUserInfo }) => {
       );
       if (response.success) {
         message.success(response.message);
-        balance += price;
+        if (role !== 'student') {
+          balance -= price;
+        } else {
+          balance += price;
+        }
         updateUserInfo({ ...user, balance });
       }
     } catch (error) {
@@ -30,12 +35,12 @@ const StripeCheckoutButton = ({ price, token, user, updateUserInfo }) => {
 
   return (
     <StripeCheckout
-      label="Recharge"
+      label="Payment"
       name="Advanced Web."
       image="https://my-final-project-ptudwnc.s3.amazonaws.com/default-image/41ea2374-59c9-409e-a8ad-21a8020e0b2a.jpg"
       description={`Your total recharge is $${price}`}
       amount={priceForStripe}
-      panelLabel="Recharge"
+      panelLabel="Payment"
       token={onToken}
       stripeKey={publishableKey}
     />

@@ -58,7 +58,7 @@ class RechargeForm extends Component {
               <Form.Item label="Balance">
                 <Statistic value={user.balance} prefix="$" />
               </Form.Item>
-              <Form.Item label="Recharge Money">
+              <Form.Item label="Payment Money">
                 {getFieldDecorator('rechargeMoney', {
                   rules: [
                     {

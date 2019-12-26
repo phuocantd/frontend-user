@@ -20,6 +20,10 @@ const tabList = [
   {
     key: 'secur',
     tab: 'Security'
+  },
+  {
+    key: 'recharge',
+    tab: 'Recharge'
   }
 ];
 const tabListStudent = [
