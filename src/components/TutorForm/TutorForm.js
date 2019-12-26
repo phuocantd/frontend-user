@@ -326,7 +326,10 @@ class TutorForm extends Component {
         {dataTutor.length === 0 ? (
           <Empty />
         ) : (
-          _.chunk(dataTutor, 4).map(chunk => (
+          _.chunk(
+            dataTutor.filter(tutor => tutor.userInfo),
+            4
+          ).map(chunk => (
             <Row gutter={[16, 16]} key={_.uniqueId('row_')}>
               {chunk.map(data => (
                 <Col key={_.uniqueId('col_')} span={6}>

@@ -11,7 +11,6 @@ import {
   Popover,
   message
 } from 'antd';
-import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import ModalInfo from '../ModalInfo/ModalInfo';
 import services from '../../api/services';
@@ -92,7 +91,7 @@ export default class CardInfo extends Component {
         >
           <Meta
             avatar={<Avatar size={64} src={userInfo.avatar} />}
-            title={<Link to="/profile">{userInfo.name}</Link>}
+            title={userInfo.name}
             description={data.specialization.name}
           />
           <Row>
