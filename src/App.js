@@ -14,12 +14,19 @@ import NotFound from './pages/Error/NotFound';
 import NotAuth from './pages/Error/NotAuth';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import UpdateForgotPassword from './pages/UpdateForgotPassword/UpdateForgotPassword';
+import FindTutor from './pages/FindTutor/FindTutor';
 
 function App() {
   return (
     <Layout style={{ height: '100vh' }}>
       <Switch>
         <RouteWithLayout layout={Main} path="/" exact component={Home} />
+        <RouteWithLayout
+          layout={Main}
+          path="/tutors"
+          exact
+          component={FindTutor}
+        />
         <RouteWithLayout
           layout={Main}
           path="/dashboard"

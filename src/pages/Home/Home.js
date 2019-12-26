@@ -116,7 +116,7 @@ class Home extends Component {
                 <Heading textAlign="center">WELCOME</Heading>
                 <Subhead textAlign="center">Connect student with tutor</Subhead>
                 <Flex mt={3} flexWrap="wrap" justifyContent="center">
-                  <Link to="/login">
+                  <Link to="/tutors">
                     <Button type="primary">
                       <b>GETTING STARTED</b>
                     </Button>

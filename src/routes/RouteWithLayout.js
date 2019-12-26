@@ -6,7 +6,7 @@ class RouteWithLayout extends PureComponent {
   render() {
     const { path, exact, layout, component, authed, isLoggedIn } = this.props;
     if (authed && !isLoggedIn) {
-      return <Redirect to="/403" />;
+      return <Redirect to="/login" />;
     }
     return (
       <Route
