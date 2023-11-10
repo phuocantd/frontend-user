@@ -6,7 +6,7 @@
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
     "@ckeditor/ckeditor5-react": "^2.0.0",
     "antd": "^3.25.3",
-    "axios": "^0.21.2",
+    "axios": "^1.6.0",
     "babel-plugin-import": "^1.13.0",
     "bizcharts": "^3.5.6",
     "customize-cra": "^0.9.1",
